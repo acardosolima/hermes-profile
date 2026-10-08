@@ -1,0 +1,40 @@
+#!/bin/sh
+# Blocks non-interactive git push for client repositories (agu/gene).
+# Automated processes (subagents, cron, scripts) have no controlling tty and
+# will fail closed here. A human at a real terminal gets a confirmation prompt.
+#
+# Intentional bypass for trusted automation you set up yourself:
+#   GIT_PUSH_CONFIRM=skip git push
+#
+# Note: this is friction, not a hard security boundary — `git push --no-verify`
+# or editing this file bypasses it too, same as any hook. It stops accidental/
+# unattended pushes, it does not stop a determined local attacker with your
+# own user privileges.
+
+if [ "$GIT_PUSH_CONFIRM" = "skip" ]; then
+  exit 0
+fi
+
+remote="$1"
+url="$2"
+
+if ! exec 3< /dev/tty 2>/dev/null; then
+  echo "pre-push: no interactive terminal available; refusing automated push to $remote ($url)." >&2
+  echo "pre-push: set GIT_PUSH_CONFIRM=skip to bypass intentionally." >&2
+  exit 1
+fi
+
+echo "About to push to $remote ($url) as $(git config user.email)." >&2
+printf "Continue? [y/N] " >&2
+read -r answer <&3
+exec 3<&-
+
+case "$answer" in
+  [yY]|[yY][eE][sS])
+    exit 0
+    ;;
+  *)
+    echo "Push aborted." >&2
+    exit 1
+    ;;
+esac

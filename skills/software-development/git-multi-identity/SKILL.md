@@ -144,6 +144,62 @@ session's cwd, which is what holds the lock.
   handle on it — that leftover empty directory is harmless; it can be
   removed once the lock releases (e.g. after the agent session ends).
 
+## Blocking direct commits to protected branches
+
+A reviewer who keeps seeing work land straight on `main`/`master`/`trunk`
+wants this enforced, not just promised — revertable is not the same as a
+clean log, and "I'll remember to branch next time" doesn't hold up across
+a long session. Add to the `pre-commit` hook (same shared `hooksPath` as
+the other checks, every identity, not just client ones):
+
+```sh
+branch="$(git symbolic-ref --short HEAD 2>/dev/null)"
+[ -z "$branch" ] && exit 0   # detached HEAD (e.g. mid-rebase) — let it through
+if printf '%s\n' "$branch" | grep -Eqi '^(main|master|trunk)$'; then
+  echo "refusing to commit directly on protected branch '$branch'" >&2
+  exit 1
+fi
+```
+
+Give it one explicit bypass env var (e.g. `GIT_ALLOW_PROTECTED_COMMIT=1`)
+for genuine exceptions (a repo's very first commit, before branching makes
+sense) — same escape-hatch pattern as the push-confirmation hook. Verify
+with a real repo: commit on the protected branch name (must fail), commit
+on a feature branch (must pass), bypass var set on the protected branch
+(must pass) — test the bypass against the protected branch specifically,
+not incidentally on a feature branch where it was never being tested.
+
+## Best-effort auto-fix formatting on commit (lint-staged pattern)
+
+When the user wants linting handled but NOT gated (a formatter should just
+fix what it can, never block a commit over style), replicate the
+lint-staged pattern as a hook step: detect staged files by extension, run
+whatever formatter is actually installed against just those files, re-stage
+what changed, and always exit 0 regardless of whether a tool was found or
+ran — a missing tool is silence, not an error:
+
+```sh
+staged="$(git diff --cached --name-only --diff-filter=ACM)"
+# bucket $staged by extension, then e.g.:
+command -v black >/dev/null 2>&1 && printf '%s\n' "$py_files" | xargs -r black --quiet --
+# ...re-stage whatever was touched:
+printf '%s\n' "$changed_files" | xargs -r git add --
+exit 0
+```
+
+Do NOT extend this to running the test suite on commit, even "informally"
+— a failing test is often legitimate mid-work (the whole point of TDD's
+RED step), so a test-runner hook that's supposed to never block isn't
+actually doing anything useful, and one that does block fights the user's
+own workflow. Tests belong in CI or at most a `pre-push` gate, not
+`pre-commit`. Verify the auto-fixer with a fake formatter script placed on
+`PATH` for the test (don't require the real tool to be installed just to
+prove the hook's plumbing works) — and remember `PATH` entries for a
+bash-resolved command must be POSIX form (`/c/...`) even though the file
+arguments passed to a native `.exe` on the very same command line need the
+`C:/...` form; mixing the two up means `command -v <fake-tool>` silently
+returns not-found with no error to explain why.
+
 ## Pitfall: native Windows binaries mangle `/c/...` MSYS paths
 
 Passing an MSYS-style path (`/c/Users/...`) as a positional argument to
@@ -311,6 +367,69 @@ keypairs per identity, not one:
    `ssh -T git@github.com-<identity>` or `git ls-remote` from a tool call
    should hang/fail for lack of a tty to supply it — that failure IS the
    verification, you cannot and should not complete it yourself).
+
+## Ready-to-copy hook files
+
+The above sections describe the design; `scripts/githooks/` ships the actual
+working files so a new machine doesn't need to hand-write them from prose:
+
+```
+scripts/githooks/lib/            shared logic sourced by every hook below
+scripts/githooks/common/         default hooksPath: branch-protect, autofix, commit-msg
+scripts/githooks/client-confirm/ same three + the tty push-confirmation gate
+```
+
+To deploy: copy the whole `scripts/githooks/` tree to `~/.githooks/` (or
+wherever `core.hooksPath` should point), `chmod +x` every file except
+`lib/secret-patterns.txt`, then wire `core.hooksPath` per the includeIf
+sections above. Note the shipped `common/` has no `pre-push` file at all
+(no-op by design — push-time secret re-scanning was tried and deliberately
+dropped; see the pitfalls section below for why pre-commit-only was kept).
+Re-verify with the test recipes in each section above after copying — don't
+assume a copy-pasted hook behaves identically on a different machine/git
+version without checking.
+
+## Pitfalls writing the pre-commit/pre-push secret-scanner and commit-msg hooks
+
+- **Secret-pattern regex must be case-insensitive AND tolerate a variable-name
+  suffix between the keyword and the assignment operator.** A naive pattern
+  like `(secret|token)[[:space:]]*[:=]...` misses `AWS_SECRET_KEY = "..."`
+  twice over: `SECRET` is uppercase, and `_KEY` sits between the keyword and
+  `=`. Use `grep -Eif` (case-insensitive) and allow `[a-zA-Z_]*` right after
+  the keyword alternation before the whitespace/operator. Verify with a
+  deliberately-uppercase, deliberately-suffixed test string, not just a
+  lowercase exact-keyword one — the exact-keyword case passes even a broken
+  pattern and gives false confidence.
+- **A `pre-push` hook that diffs `$local_sha` alone for a brand-new branch
+  (`remote_sha` all zeros) silently scans nothing.** `git diff <sha>` compares
+  the working tree/index to that commit, not the commit's own changes — for a
+  clean working tree this is an empty diff, so the scan always "passes" on a
+  repo's first push regardless of content. Use the empty-tree hash as the
+  base instead: `git diff 4b825dc642cb6eb9a060e54bf8d69288fbee4904..$local_sha`.
+  This bug is invisible unless you specifically test the first-push case
+  (new branch, `remote_sha = 000...0`) — testing only incremental pushes
+  against an already-existing remote branch won't catch it.
+- Test the push-side scanner by committing the secret with `--no-verify`
+  (bypassing pre-commit on purpose) so you're proving the push hook catches
+  it independently, not just re-testing the commit hook. Test both the
+  first-push and incremental-push code paths separately — the bug above only
+  manifests on the first.
+- For a hooksPath that combines a secret scan with a human-confirmation gate
+  (e.g. client identities), run the scan BEFORE the tty-confirmation prompt
+  and `exit 1` immediately on a match — don't let a human approve past a
+  secret leak. Verify the ordering explicitly: a secret-laden non-interactive
+  push must fail with the scanner's message, not the tty one; a clean
+  non-interactive push must fail with the tty message, proving the scan step
+  isn't accidentally swallowing the confirmation step too.
+- A `commit-msg` hook enforcing Conventional Commits should special-case
+  `Merge *`, `Revert *`, `fixup!/squash!` subjects — rejecting merge commits
+  breaks normal git workflows for no benefit.
+- Put the actual regex/scan logic in a shared `lib/` script sourced by both
+  `pre-commit` and `pre-push` (and by every per-identity hooksPath directory
+  that needs it) rather than duplicating it — `core.hooksPath` is a full
+  override of the hooks directory, so an identity with a stricter hooksPath
+  (e.g. adding a push-confirmation gate) must still carry its own copies of
+  the shared checks, not just the extra gate, or it silently loses them.
 
 ## Prefer SSH over HTTPS for multi-account GitHub — avoid surprise auth popups
 
