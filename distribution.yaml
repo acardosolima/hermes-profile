@@ -1,0 +1,30 @@
+name: hermes-profile
+version: 1.0.0
+description: "Personal Hermes agent config: API-key-only Anthropic auth, local Ollama (hermes3:8b) delegation orchestration, TDD/code-review/debugging skills auto-loaded."
+hermes_requires: ">=0.12.0"
+author: "Adriano Lima"
+license: "MIT"
+
+env_requires:
+  - name: ANTHROPIC_TOKEN
+    description: "Anthropic API key (sk-ant-...) — NOT an OAuth/company login. Primary credential for model.provider=anthropic."
+    required: true
+  - name: GOOGLE_API_KEY
+    description: "Google/Gemini API key"
+    required: false
+    default: ""
+  - name: SLACK_BOT_TOKEN
+    description: "Slack bot token, only needed if this device runs the Slack gateway"
+    required: false
+    default: ""
+  - name: SLACK_APP_TOKEN
+    description: "Slack app-level token, only needed if this device runs the Slack gateway"
+    required: false
+    default: ""
+
+distribution_owned:
+  - SOUL.md
+  - config.yaml
+  - skills/
+  - plugins/
+  - distribution.yaml
