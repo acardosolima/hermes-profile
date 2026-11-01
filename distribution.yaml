@@ -1,24 +1,30 @@
 name: hermes-profile
 version: 1.0.0
-description: "Personal Hermes agent config: API-key-only Anthropic auth, local Ollama (hermes3:8b) delegation orchestration, TDD/code-review/debugging skills auto-loaded."
+description: "Personal Hermes agent config: provider-agnostic model routing (choose per device), local Ollama (hermes3:8b) delegation orchestration, TDD/code-review/debugging skills auto-loaded."
 hermes_requires: ">=0.12.0"
 author: "Adriano Lima"
 license: "MIT"
 
+# No credential is required to install this profile. model.provider/model
+# in config.yaml are just a starting default; every device picks its own
+# provider and key after install (see README "Per-device setup"). None of
+# these are shared secrets — each one is a personal/work credential that
+# differs per machine and is never committed to this repo.
 env_requires:
   - name: ANTHROPIC_TOKEN
-    description: "Anthropic API key (sk-ant-...) — NOT an OAuth/company login. Primary credential for model.provider=anthropic."
-    required: true
+    description: "Anthropic API key (sk-ant-...), only needed on devices that use model.provider=anthropic. Differs per device/organization (e.g. consultancy key vs. work key) — not shared."
+    required: false
+    default: ""
   - name: GOOGLE_API_KEY
-    description: "Google/Gemini API key"
+    description: "Google/Gemini API key, only needed on devices that route to a Google model. Differs per device — not shared."
     required: false
     default: ""
   - name: SLACK_BOT_TOKEN
-    description: "Slack bot token, only needed if this device runs the Slack gateway"
+    description: "Slack bot token, only needed if this device runs the Slack gateway. Not yet set up on any device."
     required: false
     default: ""
   - name: SLACK_APP_TOKEN
-    description: "Slack app-level token, only needed if this device runs the Slack gateway"
+    description: "Slack app-level token, only needed if this device runs the Slack gateway. Not yet set up on any device."
     required: false
     default: ""
 

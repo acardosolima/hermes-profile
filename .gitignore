@@ -43,10 +43,12 @@ backups/
 errors.log
 .hermes_history
 
-# Skill/cron local bookkeeping (never part of the authored content)
+# Skill/cron/plugin local bookkeeping (never part of the authored content)
 cron/*
 !cron/jobs.json
 skills/.*
+plugins/.install-metadata.json
+plugins/.install-metadata.json.lock
 
 # OS cruft
 .DS_Store
