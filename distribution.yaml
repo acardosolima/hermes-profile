@@ -34,3 +34,4 @@ distribution_owned:
   - skills/
   - plugins/
   - distribution.yaml
+  - agent-hooks/
