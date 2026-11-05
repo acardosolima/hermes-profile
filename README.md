@@ -29,6 +29,46 @@ hermes config set delegation.provider openrouter
 hermes config set delegation.model <model-id>
 ```
 
+### skill_manage guard hook (per-device activation)
+
+This profile ships `agent-hooks/gate-skill-manage.py`, a `pre_tool_call`
+shell hook that blocks the agent from calling `skill_manage` (create/patch/
+delete a skill) — reading/discovering skills (`skill_view`, `skills_list`,
+auto-loaded skills) is unaffected. `config.yaml` does NOT hardcode the
+`hooks:` block pointing at it, because the hook `command` is a literal path
+with no variable expansion and `HERMES_HOME` differs per device (notably:
+on at least one Windows install, `HERMES_HOME` is
+`%LOCALAPPDATA%\hermes`, NOT `~/.hermes` — verify with `hermes doctor`
+before assuming either).
+
+After `hermes profile install` / `hermes profile update`, point this
+device's own config at its own absolute script path:
+
+```bash
+hermes config set hooks.pre_tool_call '[{"matcher": "skill_manage", "command": "python <ABSOLUTE_PATH_TO_PROFILE>/agent-hooks/gate-skill-manage.py", "timeout": 5, "fail_closed": true}]'
+```
+
+Then approve the hook. The classic CLI prompts interactively on first use;
+the Desktop app and gateway never prompt (no TTY), so on those surfaces
+write the allowlist entry by hand — `~/.hermes/shell-hooks-allowlist.json`
+relative to the ACTUAL `HERMES_HOME` for this install, not a literal `~/.hermes`:
+
+```json
+{
+  "approvals": [
+    {
+      "event": "pre_tool_call",
+      "command": "python <ABSOLUTE_PATH_TO_PROFILE>/agent-hooks/gate-skill-manage.py"
+    }
+  ]
+}
+```
+
+Verify with `hermes hooks doctor` (expect "allowlisted" + valid JSON on the
+synthetic payload). A hook added to an already-running Desktop/gateway
+session does not reliably hot-reload — open a new chat/session before
+trusting the block.
+
 Update after a push:
 
 ```bash
