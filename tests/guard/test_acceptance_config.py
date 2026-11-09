@@ -61,6 +61,10 @@ class CodeExecutionCheckTests(support.TempCase):
     def test_check_fails_when_the_config_is_missing(self):
         self.assertFalse(acceptance.config_check(self.tmp / "missing.yaml")[1])
 
+    def test_default_config_is_the_profile_config_above_the_plugin(self):
+        self.assertEqual(acceptance.HERE.parents[1], support.ROOT)
+        self.assertTrue((acceptance.HERE.parents[1] / "config.yaml").is_file())
+
     def test_shipped_config_has_the_toolset_off(self):
         shipped = support.ROOT / "config.yaml"
         self.assertTrue(acceptance.config_check(shipped)[1])

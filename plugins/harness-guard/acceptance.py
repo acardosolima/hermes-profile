@@ -137,7 +137,8 @@ def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--live", metavar="PROFILE", help="also run harmless commands through this Hermes profile")
     parser.add_argument("--config", metavar="PATH", type=Path, default=None,
-                        help="Hermes config.yaml to check (default: $HERMES_HOME/config.yaml)")
+                        help="Hermes config.yaml to check (default: the config.yaml two directories above "
+                             "this script, which is the profile's own config when installed)")
     args = parser.parse_args(argv)
     try:
         lock = binaries.load_lock(HERE / binaries.LOCK_NAME)
@@ -149,7 +150,7 @@ def main(argv=None) -> int:
     with tempfile.TemporaryDirectory(prefix="hg-acceptance-") as tmp:
         work = Path(tmp)
         results = offline(binary, work)
-        results.append(config_check(args.config or hermes_home() / "config.yaml"))
+        results.append(config_check(args.config or HERE.parents[1] / "config.yaml"))
         if args.live:
             results += live(args.live, work)
     failed = 0
