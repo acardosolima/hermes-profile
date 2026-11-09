@@ -39,11 +39,11 @@ class ConformanceTests(support.TempCase):
         for case in support.load_json("cases.json"):
             with self.subTest(case["name"]):
                 decision = self.decide(case)
-                self.assertEqual(decision.label, case["expect"], decision)
+                self.assertEqual(decision.label, support.expected(case), decision)
 
     def test_blocks_and_refusals_carry_a_reason(self):
         for case in support.load_json("cases.json"):
-            if case["expect"] in ("block", "unjudgeable", "refused"):
+            if support.expected(case) in ("block", "unjudgeable", "refused"):
                 with self.subTest(case["name"]):
                     directive = adapter.directive_for(self.decide(case))
                     self.assertEqual(directive["action"], "block")
@@ -51,7 +51,7 @@ class ConformanceTests(support.TempCase):
 
     def test_every_ask_becomes_a_block_for_the_agent(self):
         for case in support.load_json("cases.json"):
-            if case["expect"] == "ask":
+            if support.expected(case) == "ask":
                 with self.subTest(case["name"]):
                     directive = adapter.directive_for(self.decide(case))
                     self.assertEqual(directive["action"], "block")

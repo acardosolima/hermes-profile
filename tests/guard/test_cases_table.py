@@ -29,6 +29,17 @@ class CaseTableTests(unittest.TestCase):
             with self.subTest(case["name"]):
                 self.assertIn(case["expect"], LABELS)
 
+    def test_platform_overrides_are_exact_and_explained(self):
+        for case in self.cases:
+            if "expect_windows" in case:
+                with self.subTest(case["name"]):
+                    self.assertIn(case["expect_windows"], LABELS)
+                    self.assertTrue(case.get("windows_note"))
+
+    def test_only_documented_windows_gaps_exist(self):
+        gaps = sorted(case["name"] for case in self.cases if "expect_windows" in case)
+        self.assertEqual(gaps, ["stage a dotenv file"])
+
     def test_every_enforced_rule_has_an_exact_block_or_ask_case(self):
         covered = {case["rule"] for case in self.cases if case["expect"] in ("block", "ask")}
         for rule_id, classification in self.rules.items():

@@ -52,7 +52,7 @@ def offline(binary: Path, work: Path) -> list[tuple[str, bool, str]]:
             case["tool"], args, str(project), "acceptance",
             lambda payloads: adapter.judge(payloads, binary, work / "state"),
         )
-        expect = case["expect"]
+        expect = case.get("expect_windows", case["expect"]) if os.name == "nt" else case["expect"]
         results.append((case["name"], decision.label == expect, f"expected {expect}, got {decision.label}"))
     return results
 

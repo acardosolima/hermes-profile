@@ -193,6 +193,9 @@ Known gaps, so you can judge the risk:
 - The guard judges each call on its own. A shell that has changed directory
   carries that directory into the next call, and the guard only checks that it is
   not `/`, home or a system location.
+- On Windows, upstream's check that stops `git add` of a secret file does not
+  fire, because its pattern needs a `/` before the file name and Windows paths use
+  backslashes. The test table pins this as a known gap.
 - Verified live on Linux only. macOS and Windows are covered by the offline
   conformance tests in CI, not by a live Hermes session.
 

@@ -25,7 +25,7 @@
   {"name": "bypass signing flag", "rule": "R10", "tool": "terminal", "args": {"command": "git commit --no-gpg-sign -m x"}, "expect": "block"},
   {"name": "hard reset on main", "rule": "R11", "tool": "terminal", "args": {"command": "git reset --hard origin/main"}, "expect": "block"},
   {"name": "direct push to main", "rule": "R12", "tool": "terminal", "args": {"command": "git push origin main"}, "expect": "ask"},
-  {"name": "stage a dotenv file", "rule": "R15", "tool": "terminal", "args": {"command": "git add .env"}, "expect": "block"},
+  {"name": "stage a dotenv file", "rule": "R15", "tool": "terminal", "args": {"command": "git add .env"}, "expect": "block", "expect_windows": "allow", "windows_note": "upstream's secret-staging pattern needs a slash before the file name, and Windows paths use backslashes"},
   {"name": "cat a dotenv file", "rule": "RUNTIME_FLOOR", "tool": "terminal", "args": {"command": "cat .env"}, "expect": "block"},
   {"name": "process input is judged", "rule": "R01", "tool": "process_manage", "args": {"action": "submit", "session_id": "s", "data": "sudo ls"}, "expect": "block"},
   {"name": "process listing is not guarded", "rule": "none", "tool": "process_manage", "args": {"action": "list"}, "expect": "unguarded"},

@@ -25,6 +25,11 @@ def load_json(name):
     return json.loads((base / name).read_text(encoding="utf-8"))
 
 
+def expected(case):
+    """Expected label for this platform: `expect_windows` overrides `expect` on Windows."""
+    return case.get("expect_windows", case["expect"]) if os.name == "nt" else case["expect"]
+
+
 def real_lock():
     return binaries.load_lock(PLUGIN_DIR / binaries.LOCK_NAME)
 

@@ -107,6 +107,8 @@ def absolute_path(value: Any, cwd: str, home: Optional[str] = None) -> str:
         text = os.path.splitdrive(cwd)[0] + text
     if not (os.path.isabs(text) or text.startswith("/")):
         text = os.path.join(cwd, text)
+    if os.name == "nt":
+        text = text.replace("\\", "/")
     return text
 
 
