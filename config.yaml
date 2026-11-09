@@ -1,4 +1,4 @@
-_config_version: 49
+_config_version: 53
 agent:
   disabled_toolsets:
     - a2a
@@ -25,7 +25,6 @@ agent:
     - tts
     - video
     - video_gen
-    - web
     - x_search
     - yuanbao
   fast_auto_seconds: 60
@@ -38,8 +37,6 @@ auth:
   adopt_external_logins: true
   codex_login_flow: device_code
 browser:
-  extension_control:
-    enabled: false
   inactivity_timeout: 120
 code_execution:
   max_tool_calls: 50
@@ -141,7 +138,6 @@ known_builtin_toolsets:
     - discord
     - discord_admin
     - file
-    - homeassistant
     - image_gen
     - kanban
     - memory
@@ -176,6 +172,8 @@ memory:
 model:
   default: claude-sonnet-5
   provider: anthropic
+  base_url: https://api.anthropic.com
+  api_mode: anthropic_messages
 platform_toolsets:
   cli:
     - clarify
@@ -186,6 +184,7 @@ platform_toolsets:
     - terminal
     - todo
     - vision
+    - web
   discord:
     - hermes-discord
   google_chat:
@@ -251,6 +250,7 @@ telemetry:
   shared_metrics:
     enabled: false
     send: false
+    offer_version: 2
 terminal:
   backend: local
   container_cpu: 1
