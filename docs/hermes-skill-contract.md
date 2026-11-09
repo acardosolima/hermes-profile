@@ -22,6 +22,9 @@ Hermes version for every `source-read` claim: v0.22.6.
 | A distribution containing any symlink is rejected. | source-read |
 | `skills/<category>/` directories are merged per authored root. Each skill directory is replaced whole, so files upstream removed from a skill disappear. A skill dropped from the profile is not deleted from an existing device. | observed (v0.22.6): a removed reference file disappeared, a new one appeared, a dropped skill stayed |
 | `hermes skills list` shows the installed skills under the `harness` category as enabled. | observed (v0.22.6): all 8 listed |
+| `hermes -z "/harness-plan sync"` expands the slash command into a skill invocation. The model then made `search_files`, `terminal` and `skill_view` calls, and `skill_view` loaded the bundled `references/sync.md`. | observed (v0.22.6, model `claude-sonnet-5`) |
+| `hermes -z "/harness-review ..."` ran to a structured review result and found a real defect (division by zero on an empty list) in a throwaway commit. | observed (v0.22.6, model `claude-sonnet-5`) |
+| Upstream skill text is largely Japanese and some output text refers to Claude (for example a closing line saying Claude will summarize the result). The translator does not rewrite prose. | observed (v0.22.6) |
 | `hermes profile update` states that `config.yaml` is preserved unless `--force-config` is given. | observed (v0.22.6) |
 | `hermes profile install` and `update` ask for confirmation and cancel without a TTY unless `-y` is passed. | observed (v0.22.6) |
 
@@ -70,9 +73,11 @@ skill references.
 
 ## Runtime verification
 
-Run on Hermes v0.22.6 (2026.9.24), Linux, with a scratch profile installed
+Run on Hermes v0.22.6 (2026.9.24), Linux, with scratch profiles installed
 from a local clone of this repo and deleted afterwards. Observed: install,
-skill discovery and the update path (rows above). Not observed: running a
-harness skill through a model, slash command invocation, extra frontmatter
-keys (the generator drops them), and plugin hooks. Those rows stay `unknown`
-until exercised with a configured model provider.
+skill discovery, the update path including a real bump to upstream v5.16.0,
+and one-shot runs of `/harness-plan sync` and `/harness-review` through a
+model (rows above). Not observed: executing the bundled shell scripts through
+Hermes, an end to end `/harness-plan create` or `/harness-work` run, extra
+frontmatter keys (the generator drops them), and plugin hooks. Those rows stay
+`unknown`.
