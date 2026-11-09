@@ -171,9 +171,9 @@ macOS amd64 and arm64, Windows amd64. Anywhere else every guarded call is blocke
 Known gaps, so you can judge the risk:
 
 - `execute_code` runs Python the guard cannot read. The `code_execution` toolset
-  is enabled in this profile's shipped `config.yaml`, so a model can delete files
-  or run commands through it unseen. Turn that toolset off if you rely on the
-  guard. This is the largest gap.
+  is not enabled in this profile's shipped `config.yaml`. Do not add it back if
+  you rely on the guard. Code still runs through `terminal`, where each command
+  is judged.
 - `delegate_task` children, `skill_manage` and `search_files` are not inspected,
   and whether hooks fire inside delegated children is unverified.
 - The `cronjob_manage` tool can schedule scripts. It is disabled in this

@@ -57,6 +57,34 @@ def offline(binary: Path, work: Path) -> list[tuple[str, bool, str]]:
     return results
 
 
+def code_execution_enabled(config_text: str) -> bool:
+    """True when a `platform_toolsets` list in a Hermes config names `code_execution`.
+
+    The guard cannot read Python, so that toolset is a way around it. This is a line
+    scan, not a YAML parse: the standard library has no parser.
+    """
+    inside = False
+    for line in config_text.splitlines():
+        if line.strip().startswith("#") or not line.strip():
+            continue
+        if not line.startswith((" ", "\t")):
+            inside = line.split("#", 1)[0].strip() == "platform_toolsets:"
+            continue
+        if inside and line.split("#", 1)[0].strip() == "- code_execution":
+            return True
+    return False
+
+
+def config_check(config_path: Path) -> tuple[str, bool, str]:
+    name = "code_execution toolset is off"
+    try:
+        text = config_path.read_text(encoding="utf-8")
+    except OSError as exc:
+        return name, False, f"could not read {config_path} ({type(exc).__name__})"
+    enabled = code_execution_enabled(text)
+    return name, not enabled, "enabled in platform_toolsets, the guard cannot read its Python" if enabled else "off"
+
+
 LIVE_CASES = [
     ("allowed: echo", "Use the terminal tool exactly once to run this exact command and report only the raw tool "
      "result: echo acceptance-ok", "allow", "acceptance-ok"),
@@ -108,6 +136,8 @@ def live(profile: str, work: Path) -> list[tuple[str, bool, str]]:
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--live", metavar="PROFILE", help="also run harmless commands through this Hermes profile")
+    parser.add_argument("--config", metavar="PATH", type=Path, default=None,
+                        help="Hermes config.yaml to check (default: $HERMES_HOME/config.yaml)")
     args = parser.parse_args(argv)
     try:
         lock = binaries.load_lock(HERE / binaries.LOCK_NAME)
@@ -119,6 +149,7 @@ def main(argv=None) -> int:
     with tempfile.TemporaryDirectory(prefix="hg-acceptance-") as tmp:
         work = Path(tmp)
         results = offline(binary, work)
+        results.append(config_check(args.config or hermes_home() / "config.yaml"))
         if args.live:
             results += live(args.live, work)
     failed = 0

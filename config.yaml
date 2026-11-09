@@ -177,7 +177,6 @@ model:
 platform_toolsets:
   cli:
     - clarify
-    - code_execution
     - delegation
     - file
     - skills
