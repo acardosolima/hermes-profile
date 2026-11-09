@@ -24,6 +24,24 @@ jobs:
       - name: Unit tests
         run: python -m unittest discover -s tools/tests -t tools
 
+  guard:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    env:
+      HARNESS_GUARD_REQUIRE_BINARY: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Guard tests with the real pinned policy binary
+        run: python -m unittest discover -s tests/guard
+      - name: Acceptance check
+        run: python plugins/harness-guard/acceptance.py
+
   lint:
     runs-on: ubuntu-latest
     steps:
@@ -34,7 +52,7 @@ jobs:
       - name: Ruff
         run: |
           python -m pip install ruff
-          ruff check tools
+          ruff check tools plugins/harness-guard tests/guard
 
   generated-in-sync:
     runs-on: ubuntu-latest

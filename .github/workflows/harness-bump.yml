@@ -52,6 +52,10 @@ jobs:
           python tools/harness_sync.py sync
           python tools/harness_sync.py check
           python -m unittest discover -s tools/tests -t tools
+          # Fails when upstream added a rule that tests/guard/rules.json does not classify,
+          # or when the new binary no longer gives the expected verdicts.
+          HARNESS_GUARD_REQUIRE_BINARY=1 python -m unittest discover -s tests/guard
+          python plugins/harness-guard/acceptance.py
 
       - name: Open pull request
         if: steps.bump.outputs.changed == 'true'
@@ -69,7 +73,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git checkout -b "$branch"
-          git add upstream.lock skills/harness
+          git add upstream.lock skills/harness plugins/harness-guard/binaries.lock.json
           git commit -m "chore: bump harness to ${TAG}" \
             -m "Regenerate skills/harness from the pinned upstream release."
           git push origin "$branch"

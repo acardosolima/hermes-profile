@@ -307,6 +307,7 @@ _left_core_scoped:
 plugins:
   enabled:
     - homeassistant
+    - harness-guard
   disabled: []
 _left_core_installed:
   - homeassistant

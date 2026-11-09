@@ -43,13 +43,27 @@ scripts inside the skill directory.
 | A hook with `fail_closed: true` blocks on timeout or unparseable output, for blocking-capable events only. | source-read |
 | A plugin can call `ctx.register_hook("pre_tool_call", callback)` from `register(ctx)`. A callback that exceeds `plugins.hook_callback_timeout` fails closed. | source-read |
 | Plugins are opt-in through `plugins.enabled` in `config.yaml`. This profile already ships `plugins.enabled: [homeassistant]`. | source-read |
-| A plugin hook needs no allowlist consent and no per-device command path. | unknown |
+| A plugin hook needs no allowlist consent and no per-device command path. `hermes plugins enable <name>` is the only activation step. | observed (v0.22.6) |
 | `hermes profile update` keeps an existing device's `config.yaml` unless `--force-config` is given, so a new `plugins.enabled` entry does not reach existing devices by update. | source-read |
+| A plugin `pre_tool_call` callback receives `tool_name` (for example `terminal`), `args` (for example `{"command": ...}`), `session_id`, `task_id`, `tool_call_id` and `turn_id`. | observed (v0.22.6) |
+| Returning `{"action": "block", "message": ...}` stops the call, and the model receives the message as an error result. The command does not run. | observed (v0.22.6) |
+| The hook runs with the Hermes install directory as its working directory, not the project directory, and its `TERMINAL_CWD` environment value belongs to the shared gateway. The session directory is found where the terminal tool finds it: the per-session record (it follows `cd`, and its keys are profile-qualified, ending in the task id), the live terminal environment, then on the first call `terminal_tool._tenv("TERMINAL_CWD")` or `_get_env_config()["cwd"]`. | observed (v0.22.6) |
+| An earlier version of the guard fell back to the Hermes install directory when no session directory was found. Live checks judged against that wrong directory and only passed because temp paths are allowed. The guard now blocks when the directory is unknown. | observed (v0.22.6) |
+| `hermes profile install` prints `hermes gateway restart` for refreshing plugin code. | observed (v0.22.6) |
+| The launching shell's environment variables are not visible to plugin hooks. A value set with `hermes config set` was also not returned by `hermes_cli.config.get_env_value` inside a hook. | observed (v0.22.6) |
+| `{"action": "approve"}` goes to the approval gate. With the default `approvals.mode: smart` an auxiliary model approved a direct `git push origin main`, so `approve` is not a guaranteed human check. | observed (v0.22.6) |
+| After a plugin is enabled, replacing its files with `hermes profile update` did not change the running behavior of that profile until a fresh profile was installed. The exact reload step was not found. | observed (v0.22.6) |
+| Hermes' `read_file` refuses secret-bearing dotenv files on its own, independent of this guard. | observed (v0.22.6) |
+| A `pre_tool_call` callback that raises or times out is treated as a veto: the tool call is blocked. | source-read |
 
 Consequence for the guard: a plugin shipped under `plugins/` registers its
-hook without a command path or an allowlist step. It still has to be enabled
-once per existing device, because `config.yaml` is not replaced on update.
-This is the preferred design, pending the `unknown` rows above.
+hook without a command path or an allowlist step. It is enabled for new
+installs by `config.yaml` and once per existing device with
+`hermes plugins enable harness-guard`, because `config.yaml` is not replaced on
+update. Asks from the harness become blocks, because the approval gate cannot
+be relied on. The guard reads no settings, so an agent cannot switch it off
+through them; `hermes plugins disable` is the only off switch, and calls that
+mention the guard or Hermes' administration commands are refused.
 
 ## Tool names seen in Hermes payloads
 
@@ -77,7 +91,15 @@ Run on Hermes v0.22.6 (2026.9.24), Linux, with scratch profiles installed
 from a local clone of this repo and deleted afterwards. Observed: install,
 skill discovery, the update path including a real bump to upstream v5.16.0,
 and one-shot runs of `/harness-plan sync` and `/harness-review` through a
-model (rows above). Not observed: executing the bundled shell scripts through
-Hermes, an end to end `/harness-plan create` or `/harness-work` run, extra
-frontmatter keys (the generator drops them), and plugin hooks. Those rows stay
-`unknown`.
+model (rows above). The guard plugin was also exercised live: a fresh profile,
+`hermes plugins enable harness-guard`, then harmless commands. `echo` and a
+write inside the project ran. `sudo -n true`, a force push to a nonexistent
+remote, a direct push to `main`, a secret-file read and a write outside the
+project were stopped. After the review fixes (patch-file mode, `workdir`, `~/`
+paths, unjudgeable calls, protected references, directory lookup),
+`plugins/harness-guard/acceptance.py --live` passed 50 of 50 checks on a fresh
+install. Not observed: executing the bundled shell scripts through Hermes, an
+end to end `/harness-plan create` or `/harness-work` run, extra frontmatter keys
+(the generator drops them), the guard on macOS and Windows with a live Hermes,
+and `execute_code` or `delegate_task` calls, which the guard does not inspect.
+Those rows stay `unknown`.
