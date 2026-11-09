@@ -548,7 +548,7 @@ def _is_shell_script(relpath, content):
 
 def _open_directory_modes(root):
     """mkdtemp creates 0700 directories; published trees should be 0755."""
-    for current, dirs, _ in os.walk(root):
+    for current, _dirs, _ in os.walk(root):
         Path(current).chmod(0o755)
 
 

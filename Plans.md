@@ -19,8 +19,8 @@ is `unknown`, not absent.
 
 | Task | Content | DoD | Depends | Status |
 |------|---------|-----|---------|--------|
-| 1.1 | [lane:fast] [tdd:skip:data-file] Add `upstream.lock` (repo URL, tag, commit sha) pinned to the upstream release currently installed on this device. | File parses as JSON. The sha resolves to the tag via `git ls-remote`. | - | cc:WIP |
-| 1.2 | [lane:fast] [tdd:skip:setup] Add Python lint and format baseline for `tools/`: ruff config in `pyproject.toml`, tests written with stdlib `unittest` so `python -m unittest` and `pytest` both run them with no install. | `python -m unittest discover tools` exits 0 on a smoke test. `ruff check tools` exits 0 where ruff is installed (CI). | - | cc:WIP |
+| 1.1 | [lane:fast] [tdd:skip:data-file] Add `upstream.lock` (repo URL, tag, commit sha) pinned to the upstream release currently installed on this device. | File parses as JSON. The sha resolves to the tag via `git ls-remote`. | - | cc:done |
+| 1.2 | [lane:fast] [tdd:skip:setup] Add Python lint and format baseline for `tools/`: ruff config in `pyproject.toml`, tests written with stdlib `unittest` so `python -m unittest` and `pytest` both run them with no install. | `python -m unittest discover tools` exits 0 on a smoke test. `ruff check tools` exits 0. | - | cc:done |
 
 ## Phase 2: Generator
 
