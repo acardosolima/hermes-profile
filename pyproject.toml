@@ -1,9 +1,12 @@
 [tool.ruff]
-line-length = 100
+line-length = 120
 target-version = "py39"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "B", "UP"]
+# Annotations use `from __future__ import annotations`; Optional[...] stays readable on 3.9.
+ignore = ["UP045", "UP007"]
 
 [tool.ruff.lint.per-file-ignores]
 "tools/tests/*" = ["E501", "UP031"]
+"tests/guard/*" = ["E501", "UP031", "E402"]

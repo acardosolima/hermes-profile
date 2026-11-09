@@ -1,0 +1,18 @@
+{
+  "R01:no-sudo": "enforced",
+  "R02:no-write-protected-paths": "enforced",
+  "R03:no-bash-write-protected-paths": "enforced",
+  "R04:confirm-write-outside-project": "enforced",
+  "R05:confirm-rm-rf": "enforced",
+  "R06:no-force-push": "enforced",
+  "R07:codex-mode-no-write": "not-applicable",
+  "R08:breezing-reviewer-no-write": "not-applicable",
+  "R09:warn-secret-file-read": "warn-only",
+  "R10:no-git-bypass-flags": "enforced",
+  "R11:no-reset-hard-protected-branch": "enforced",
+  "R12:confirm-direct-push-protected-branch": "enforced",
+  "R13:warn-protected-review-paths": "warn-only",
+  "R14:test-required-for-src-write": "not-applicable",
+  "R15:no-stage-secret-file": "enforced",
+  "R16:no-self-approve-deferred": "not-applicable"
+}

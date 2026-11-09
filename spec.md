@@ -39,15 +39,48 @@ compatibility preamble.
 
 ## Guard hook contract
 
-- The profile ships `pre_tool_call` shell hooks under `agent-hooks/`.
-- Hermes hook config holds a literal command path, so `config.yaml` does not
-  carry the `hooks:` block. `agent-hooks/activate.py` writes it per device and
-  keeps existing guard entries.
-- Hook approval in the Hermes allowlist stays a per-device consent step. The
-  repo never writes the allowlist without the activation command being run.
-- Guards fail closed for the tools they cover. Unrelated tools pass through.
-- Guard coverage is documented per guardrail. A guardrail with no hook
-  coverage is listed as not enforced.
+- The guard is the Hermes plugin `plugins/harness-guard/`. It registers a
+  `pre_tool_call` hook, so it needs no command path and no allowlist entry.
+  `config.yaml` enables it for new installs. An existing device enables it once
+  with `hermes plugins enable harness-guard`, because `hermes profile update`
+  keeps that device's `config.yaml`.
+- Rules are not reimplemented. The plugin maps `terminal`, `process_manage`
+  input, `read_file`, `write_file` and `patch` calls to the harness payload and asks the pinned
+  upstream policy binary for the verdict, so rules and their updates come from
+  upstream. Command text is only ever passed to the binary as data.
+- `plugins/harness-guard/binaries.lock.json` pins the upstream commit, the
+  sha256 of each platform binary and the upstream rule ids. It is written by
+  `tools/harness_sync.py sync` and verified by `check`. A binary is downloaded
+  on first use from the pinned commit and used only if its hash matches.
+- The guard fails closed. If the binary is missing, unverifiable or times out,
+  the guarded tools are blocked with a message.
+- A harness "ask" (a confirmation by a human) becomes a block that tells the
+  agent to ask the user. Hermes' approval gate is not relied on, because its
+  default mode lets an auxiliary model approve.
+- The guard has no settings. The only off switch is
+  `hermes plugins disable harness-guard`. As a best-effort text filter, commands
+  and file paths that mention the guard, its lock, `harness.toml`, the Hermes
+  plugin directory or `config.yaml` (shell spellings of the home directory are
+  resolved), or the `hermes plugins|config|profile|gateway|hooks` commands, are
+  refused before the policy runs. This is not a security boundary.
+- A guarded call that cannot be judged is blocked, never sent on as empty input:
+  mistyped or missing arguments, a patch that names no file, `~user` paths, an
+  unknown working directory, or a working directory that is `/`, the home
+  directory or a system location. Relative paths and `~/` are resolved before
+  judging, a terminal `workdir` is honored, and every file named by a patch-file
+  mode patch is judged.
+- The binary is re-hashed on every call and runs with a scrubbed environment and
+  the strictest upstream delete and push policy.
+- Every upstream rule id is classified in `tests/guard/rules.json` as
+  `enforced`, `warn-only` or `not-applicable`. A release that adds a rule fails
+  the guard tests until the rule is classified. The bump workflow runs these
+  tests before it opens a pull request.
+- `tests/guard/` and `plugins/harness-guard/acceptance.py` judge a table of
+  known cases against the real binary. They never execute a case.
+- Known gaps are listed in the README: tools the guard does not inspect
+  (`execute_code`, `delegate_task` children, `skill_manage`, `search_files`,
+  scheduled scripts), rules that only warn upstream, and temp-directory writes
+  that upstream allows.
 
 ### Invariants
 
