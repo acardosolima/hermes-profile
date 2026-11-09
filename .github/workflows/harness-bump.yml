@@ -1,0 +1,80 @@
+name: harness-bump
+
+on:
+  schedule:
+    - cron: "17 5 * * *"
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Upstream tag to pin (default: newest vX.Y.Z)"
+        required: false
+        default: ""
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: harness-bump
+  cancel-in-progress: false
+
+jobs:
+  bump:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Resolve release and pin it
+        id: bump
+        env:
+          TAG_INPUT: ${{ inputs.tag }}
+        run: |
+          set -euo pipefail
+          result="$(python tools/harness_sync.py bump ${TAG_INPUT:+--tag "$TAG_INPUT"})"
+          echo "$result"
+          case "$result" in
+            bumped*)
+              echo "changed=true" >> "$GITHUB_OUTPUT"
+              echo "tag=${result##* }" >> "$GITHUB_OUTPUT"
+              ;;
+            *)
+              echo "changed=false" >> "$GITHUB_OUTPUT"
+              ;;
+          esac
+
+      - name: Regenerate and verify
+        if: steps.bump.outputs.changed == 'true'
+        run: |
+          set -euo pipefail
+          python tools/harness_sync.py sync
+          python tools/harness_sync.py check
+          python -m unittest discover -s tools/tests -t tools
+
+      - name: Open pull request
+        if: steps.bump.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.bump.outputs.tag }}
+        run: |
+          set -euo pipefail
+          safe_tag="${TAG//[^A-Za-z0-9._-]/_}"
+          branch="chore/harness-bump-${safe_tag}"
+          if git ls-remote --exit-code --heads origin "$branch" >/dev/null 2>&1; then
+            echo "Branch $branch already exists; nothing to do."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$branch"
+          git add upstream.lock skills/harness
+          git commit -m "chore: bump harness to ${TAG}" \
+            -m "Regenerate skills/harness from the pinned upstream release."
+          git push origin "$branch"
+          gh pr create \
+            --base "${GITHUB_REF_NAME}" \
+            --head "$branch" \
+            --title "chore: bump harness to ${TAG}" \
+            --body "Pins upstream harness ${TAG} and regenerates skills/harness. Review the generated diff and the unresolved and missing_scripts lists in skills/harness/GENERATED.json before merging. Devices pick this up with hermes profile update."

@@ -1,0 +1,2 @@
+# Generated skills must keep their bytes on every platform.
+skills/harness/** -text

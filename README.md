@@ -69,6 +69,42 @@ synthetic payload). A hook added to an already-running Desktop/gateway
 session does not reliably hot-reload — open a new chat/session before
 trusting the block.
 
+### Harness skills (generated)
+
+`skills/harness/` holds the claude-code-harness workflow skills translated for
+Hermes: `harness-plan`, `harness-work`, `harness-review`, `harness-sync`,
+`harness-setup`, `harness-loop`, `harness-release` and `breezing`. Do not edit
+them by hand. They are generated from the upstream release pinned in
+`upstream.lock` by `tools/harness_sync.py`, and CI fails if they drift.
+
+How updates arrive:
+
+- A daily workflow looks for a newer upstream `vX.Y.Z` release, regenerates the
+  skills and opens a pull request titled `chore: bump harness to <tag>`.
+- Merge it, then run `hermes profile update master` on each device.
+- The installed version is in `skills/harness/GENERATED.json` (`upstream.tag`).
+  That file also lists `unresolved` Claude Code variables and `missing_scripts`
+  per skill, so review it on every bump.
+
+Regenerate locally (Python 3.9+, git, no other dependencies):
+
+```bash
+python tools/harness_sync.py bump    # move upstream.lock to the newest release
+python tools/harness_sync.py sync    # regenerate skills/harness
+python tools/harness_sync.py check   # exit 1 if skills/harness differs from the lock
+python -m unittest discover -s tools/tests -t tools
+```
+
+Limits:
+
+- Claude Code hooks, agent definitions and the upstream guardrail engine are not
+  translated, so the workflows run on Hermes without that enforcement. Each
+  generated skill starts with a preamble that says so.
+- `hermes profile update` replaces each shipped skill directory, but does not
+  delete a skill that was dropped from the profile. Remove those by hand.
+- How Hermes behaves when these skills run has been read from its source and
+  not yet observed on a device. See `docs/hermes-skill-contract.md`.
+
 Update after a push:
 
 ```bash
