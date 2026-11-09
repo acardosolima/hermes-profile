@@ -196,7 +196,9 @@ platform_toolsets:
   signal:
     - hermes-signal
   slack:
-    - hermes-slack
+    - clarify
+    - todo
+    - vision
   teams:
     - hermes-teams
   telegram:
