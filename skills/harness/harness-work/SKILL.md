@@ -1,7 +1,7 @@
 ---
 name: "harness-work"
 description: "HAR: Execute Plans.md tasks from single task to full parallel team run. Trigger: implement, execute, do everything, breezing, team run, parallel, composer, composer 2.5. Do NOT load for: planning, review, release, setup."
-version: "v5.15.0"
+version: "v5.16.0"
 platforms: [linux, macos, windows]
 ---
 
@@ -366,7 +366,7 @@ review/cherry-pick の直列責務は core 側に残す（adapter smoke target�
 ```
 Lead (this agent)
 ├── Worker (task-worker agent) — 実装担当
-├── Advisor (claude-code-harness:advisor) — 方針助言
+├── Advisor (harness:advisor) — 方針助言
 └── Reviewer (code-reviewer agent) — レビュー担当
 ```
 

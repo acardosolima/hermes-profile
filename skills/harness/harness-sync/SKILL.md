@@ -1,7 +1,7 @@
 ---
 name: "harness-sync"
 description: "HAR: Sync Plans.md with implementation. Drift detect, marker update, retrospective. Trigger: sync-status, where am I, check progress. --snapshot for snapshots. Do NOT load for: planning, implementation, review, release."
-version: "v5.15.0"
+version: "v5.16.0"
 platforms: [linux, macos, windows]
 ---
 
