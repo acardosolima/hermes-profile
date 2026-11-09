@@ -105,6 +105,51 @@ Limits:
 - How Hermes behaves when these skills run has been read from its source and
   not yet observed on a device. See `docs/hermes-skill-contract.md`.
 
+### Messaging platform toolsets are locked down on purpose
+
+`config.yaml`'s `platform_toolsets` pins every messaging platform (slack,
+discord, telegram, whatsapp, signal, teams, google_chat, homeassistant,
+qqbot, yuanbao) to `[clarify, todo, vision]` — messaging-only, no
+`terminal`/`file`/`code_execution`/`delegation`. This is deliberate, not a
+bug to "fix": Hermes's own toolset reference defines `hermes-slack`,
+`hermes-telegram`, `hermes-whatsapp`, `hermes-signal`, `hermes-matrix`, and
+`hermes-mattermost` as literally identical to `hermes-cli` (full shell/file
+access), and `hermes-discord` adds admin actions on top of that. Left at
+their defaults, ANY allowed user on ANY of these platforms gets full
+terminal/filesystem access to the host machine — including reading
+unencrypted SSH signing keys and `.env` secrets — gated only by an
+approval prompt that platform's own allowed users can self-approve
+(`/yolo` bypasses it entirely, per-session).
+
+Do not re-add `terminal`/`file`/`code_execution`/`delegation` to any
+platform's toolset without also:
+- Setting `terminal.cwd` to a dedicated, non-personal directory for that
+  device (`hermes config set terminal.cwd <device-specific-path>` — NOT
+  committed to this repo, since the path is per-device; see below). This
+  only changes the *default starting directory*, not a sandbox — it does
+  not stop `cd ..`, absolute paths, or `~/.ssh/...`.
+- Considering `terminal.backend: docker` for actual filesystem isolation
+  if that platform will run untrusted or semi-trusted input.
+- Accepting that `delegation` re-opens the hole even if `terminal`/`file`
+  stay off the platform's own list — a subagent can be spawned with
+  `toolsets=["terminal","file"]` explicitly regardless of the parent
+  session's own toolset.
+- Remembering there is no built-in "a different person must approve"
+  routing — approval prompts go back to whoever's chat triggered them.
+
+### Per-device bot workspace directory
+
+If you do re-enable `terminal`/`file`/`code_execution` for any messaging
+platform on a device, first create a dedicated folder for it (not your
+home directory) and point the gateway there:
+
+```bash
+mkdir -p ~/hermes-bot-workspace   # or wherever makes sense on this device
+hermes config set terminal.cwd ~/hermes-bot-workspace
+```
+
+Not committed here deliberately — the right path differs per device.
+
 Update after a push:
 
 ```bash
