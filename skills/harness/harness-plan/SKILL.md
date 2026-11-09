@@ -397,3 +397,5 @@ Plans.md への task append が完了したら、非エンジニアの発注者�
 - `harness-plan-brief` — 計画概要 HTML（非エンジニア向け、計画確定時に提案）
 - `harness-review` — 実装のレビュー
 - `harness-setup` — プロジェクト初期化
+
+hand edit that CI must reject
