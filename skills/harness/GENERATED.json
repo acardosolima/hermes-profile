@@ -1,0 +1,244 @@
+{
+  "generator_version": "1",
+  "skills": {
+    "breezing": {
+      "files": {
+        "SKILL.md": "bc6c3787e9414e8bac5aa17cf27f79be50060389a746eefcfcaf5c5d4dc9a614",
+        "references/lean-path-detail.md": "2ee721ade7564fa1f267d9b2aee64fdbb2d351243aea6811874076e77a8673a0",
+        "references/monitor-and-learning.md": "8ea887369d2465a76a05f0d0a9b2240d2fb8bba01b66d60276492bc7d78cfa6c",
+        "scripts/breezing-brief.sh": "1875442d2b0933e2313dd47ac391a886d28bbf1f69e386f5641ca18a616a0530",
+        "scripts/codex-companion.sh": "d8f3ad97f2197965fe23dcf308144252a14a8943285133160591d5a77fff9873",
+        "scripts/cursor-companion.sh": "7a9ec83920f33155491003d82959874c39a821d9b2e63feb587f8f8354247b3b",
+        "scripts/enable-1h-cache.sh": "5ea18dd935e0fe60fc4549e284b57854f5032ad2290191ad2c8ca20a161a84c6",
+        "scripts/lib/orchestration-ledger.sh": "c6d3f93b74e52bb8c57d0d74e2a1bb8937d2191204fbf10dab2a13ccbd7971bd",
+        "scripts/model-routing.sh": "e125963f328a15ff5248661a99f624cfb7414e3b164f9a7d05a4da069ea0bc1c",
+        "scripts/plan-preapproval.sh": "30d56a04dc573767e8070fca7468c44978d74ee1e931d8992a2a1ac1551487e1",
+        "scripts/resolve-impl-backend.sh": "6fd713e8fb4a63dbcf003b0e97b3e626c0109f3e04475c84f5cdf44d49de249b",
+        "scripts/set-impl-backend.sh": "25906d9db360581a0cecc77c38350db95b8d483b98b4663000e51c5a93627d19"
+      },
+      "missing_scripts": [],
+      "unresolved": []
+    },
+    "harness-loop": {
+      "files": {
+        "SKILL.md": "629403280d2cea94b54c27a784011e8bd120132f0df4252b76621eea510c3e86",
+        "references/flow.md": "e9446f214efd03d12829cf57e662c7bef6dc8bb6af66f1157e1acadc71f29607",
+        "scripts/auto-checkpoint.sh": "d4923e831f41b317edb3f2fe4f4ed54768c72a69e47b99d4491f0cc00c84f75c",
+        "scripts/build-weak-supervision-cues.sh": "3b2c6a4918fccad25c81c2178eb36e33a4fc2b283abe1931f51fd3cce90f7b76",
+        "scripts/codex-companion.sh": "d8f3ad97f2197965fe23dcf308144252a14a8943285133160591d5a77fff9873",
+        "scripts/codex-loop.sh": "1ce320829e383b49340cc13d72c082a5add1cf147854f23feca7f9479c796997",
+        "scripts/config-utils.sh": "007183d5ceac9df8c8ce5016d989f1bc0b0d1d79c5f39b6e06bfe7e250758d99",
+        "scripts/detect-review-plateau.sh": "6f3705874e6bac292859bdac5157116077a4f72b7c2cf1eb9e93b39d4d4e89c1",
+        "scripts/enable-1h-cache.sh": "5ea18dd935e0fe60fc4549e284b57854f5032ad2290191ad2c8ca20a161a84c6",
+        "scripts/enrich-sprint-contract.sh": "d637837dda084b2c2aa08e576228ec066808bc6daf77db8cf5538064a6f010ce",
+        "scripts/ensure-sprint-contract-ready.sh": "0c255a9dd8685d43b364f8b55ecb14c857681aa9c13d794284cbc198a8c9d0f2",
+        "scripts/generate-browser-review-artifact.sh": "1bf487456ff06eb468c17b9b0cfccea21f2b10e43c43b9a4a3c72b36af001ae8",
+        "scripts/generate-sprint-contract.js": "37c5f1c2bb3709758fb54cf7112416bd38bd1df7b3b1dba22c421d60e67617be",
+        "scripts/lib/advisor-response.schema.json": "2689439c5d8b44cf3809972b3a5c7f19bb7ad6d992d60ac4e3738d0de86b635c",
+        "scripts/lib/orchestration-ledger.sh": "c6d3f93b74e52bb8c57d0d74e2a1bb8937d2191204fbf10dab2a13ccbd7971bd",
+        "scripts/model-routing.sh": "e125963f328a15ff5248661a99f624cfb7414e3b164f9a7d05a4da069ea0bc1c",
+        "scripts/run-advisor-consultation.sh": "d86dfc24acfb470777595be0d3fb6f8b0f0ef7cebb75fa32da60a8ef4c8d4291",
+        "scripts/run-contract-review-checks.sh": "74fc976fd0237a14b079610950fb7e1021445ca83f65c4d2e7a0b1fdbcc47c38",
+        "scripts/write-review-result.sh": "6aca9292e2c972219694ac1db0df09107176a1c8137adb2239bb055fe26c73c7"
+      },
+      "missing_scripts": [],
+      "unresolved": [
+        "${CLAUDE_PLUGIN_ROOT}",
+        "${CLAUDE_SESSION_ID}",
+        "${CLAUDE_SKILL_DIR}"
+      ]
+    },
+    "harness-plan": {
+      "files": {
+        "SKILL.md": "15bbf4986faddbd9d8f3f89fd08b8ad4b878c0a6b0311469517dda5f0fc4df02",
+        "references/create.md": "ba3f48176ca60f88f5ff03afef223c04e3102ea2a6713a20850f28c5b0ac1cfe",
+        "references/criteria-design.md": "9d8782b7acedd35720452941f0acc8f0e1e6accd8b18e150b5b57ae7d234ae80",
+        "references/planning-quality.md": "848616e7c543e9242370f1ef5866e2ddde8b4153b78e4dc0a0e2a41218e68226",
+        "references/sync.md": "406b43d84390b0364580979663a38ea8e3e0392003b8d8a18a8f276012d195ef",
+        "scripts/claude-longrun.sh": "9c37130d99c4244f7e41455bf09d92ed32b8e56ee423efd58f87e8c1da0218a8",
+        "scripts/config-utils.sh": "007183d5ceac9df8c8ce5016d989f1bc0b0d1d79c5f39b6e06bfe7e250758d99",
+        "scripts/generate-skill-manifest.sh": "f819fcf75af5d836842c421fa9d7a916ef4c54583439929af4e3c8d728725218",
+        "scripts/generate-sprint-contract.js": "37c5f1c2bb3709758fb54cf7112416bd38bd1df7b3b1dba22c421d60e67617be",
+        "scripts/plan-registry.sh": "70a27a8f8722c52cc48e73f577780d98e0a6da2a036ba6e72d21aa64d221063b",
+        "scripts/plans-issue-bridge.sh": "84d5afc05f4f6dd59ca24b50df983971b92161589be05a3e81f7119932292eb0"
+      },
+      "missing_scripts": [
+        "scripts/report-gen.sh"
+      ],
+      "unresolved": []
+    },
+    "harness-release": {
+      "files": {
+        "SKILL.md": "b7bb22958b53f07b9bf7263794fbe0122d1f9aa44bfb9352542125d0b447fac7",
+        "references/bump-detection.md": "7185dadd11839727e618d17d0c54fbf958c812b9e685712461c19ad7d65af5d9",
+        "references/github-release.md": "9982fb53b22c35943a788ac572c1a7e447593db9adc43fb21375e865bf1cff61",
+        "references/post-gate-detail.md": "b092bc4dfa9d0c1c3542f7520dd90ce49a2e6a55239114fcb6dcf7d395544bf7",
+        "references/release-notes.md": "5adf15df93835399587ee13dc33ad3315c906fc5f9b0307116163577a14f8e7b",
+        "references/version-files.md": "67ae51beef1c195c74131069384d3718dd3d44feef75b654d770f7f6c74352df",
+        "references/versioning.md": "8ec9ca26899a1fc85f05a5d929af7a78c0fd456b6dda5008a21ef47e3ab6fdcf",
+        "scripts/build-host-plugin-dist.sh": "99e144a64162ea040de45b7965802c2c3029adc31f70b52b07297dd07461ce0c",
+        "scripts/build-opencode.js": "a8d6971bfa8b8851eedf53e34a0fa78aebc968ec25a478213f7476a99b2f2f40",
+        "scripts/check-cch-branch-protection-policy.sh": "34a6e978f8647f5a81376238248cd43fa9bf61e4be3a5d640ca694364a099fd0",
+        "scripts/check-release-version-sync.py": "667eb580653aafb45c4257885d8ed214849fc8730866c10c72b63283d79e2c91",
+        "scripts/ci/check-branch-alignment-ledger.sh": "1c10643fb7ecdc767fd684737a1d8f6fe37e8b086d806825c6af837be6fc7a38",
+        "scripts/diagnose-harness-skill-duplication.sh": "96d4c68f86a77cff913e0e449c719b30806b70502c77fff45fcfc0e0d9d9e264",
+        "scripts/generate-skill-manifest.sh": "f819fcf75af5d836842c421fa9d7a916ef4c54583439929af4e3c8d728725218",
+        "scripts/lib/host-registry.sh": "b6c82b3942bcaddecfd78f25816e751884dd26c64b18b21cf8e6aa5d7add41f2",
+        "scripts/lib/orchestration-ledger.sh": "c6d3f93b74e52bb8c57d0d74e2a1bb8937d2191204fbf10dab2a13ccbd7971bd",
+        "scripts/model-routing.sh": "e125963f328a15ff5248661a99f624cfb7414e3b164f9a7d05a4da069ea0bc1c",
+        "scripts/opencode-setup-local.sh": "5813c8c442dd86e23db03b30725ccd4e33050c1ea31c93d5cda79880af43f3be",
+        "scripts/release-preflight-host-smoke.sh": "c54b6f9012db82ccb9abe61390bfb5b88d24e6090d09bf32ecc6873fcaee8d43",
+        "scripts/release-preflight.sh": "3e74fceef228d85d28ee3cd12e536bd7c815624550cf398cb7f64204cef794c1",
+        "scripts/release-verify-publish.sh": "a0da465a64ecdcfccc76b569913ce833eaabb1496e177c59c72f96f061412954",
+        "scripts/setup-cursor.sh": "2c7c141723a7ad527adc6eeb617b7b070b9e5959459639c544afa8cb62ad1e2b",
+        "scripts/setup-grok.sh": "f18f6e5720471101bca9c7c59d0e664fee22ef03126de1a9f3144dcf5011ef25",
+        "scripts/setup-opencode.sh": "ec46cc90043432e40da9008d4f02fef3054cb3cb9d83898bbde12db893c6381c",
+        "scripts/sync-skill-mirrors.sh": "a1200ae8749d8a172e6335df8510e7810d0e0b46bde16c39ec2b8023a5f1c7d1",
+        "scripts/sync-version.sh": "b56a1a66e22fdb47dc24335bae6639ab2168c801bdce6bc53728ec5d77aaf4e2",
+        "scripts/validate-opencode.js": "7b65708856ad3b2d8fc077ff11bb61357d1d9ec30b68a5fa4800406a7b5f210f"
+      },
+      "missing_scripts": [],
+      "unresolved": [
+        "${CLAUDE_PLUGIN_ROOT}"
+      ]
+    },
+    "harness-review": {
+      "files": {
+        "SKILL.md": "93379c7640ca08339086df13ffea7648e1ff40c4297decffd10b5925a9dbde2e",
+        "references/blind-judge.md": "2cbad2cdcf38ece3c05506c0e8427a28530a39a5868b856ee6074f4b04ac282b",
+        "references/code-review.md": "89a7fc95d6f39d60bd4131269b3fd763ad957e5301d7d8876dd15ddb3b8f4dc1",
+        "references/codex-closeout.md": "06be5b85ec676ead180c50877c7898ed67f375c23014a1836bda13a5095aa26e",
+        "references/cursor-review.md": "11603bd945087378f095383883082d9badb6c97551998e347ac4a1766e5eecb6",
+        "references/dual-review.md": "45a3b5c4323c5df475bb632fcc327aa0a698773d5569f1abdecd1d117dab23e6",
+        "references/governance.md": "2a050a1e04f2baf573b24d3626b5f26c9193c64da4a42d2450df6a20a58ff681",
+        "references/plan-review.md": "7c178df87321ba41bd99b7b3e0e0cc37d023dc65dd56b39b18750c5cef70dc5b",
+        "references/scope-review.md": "3179a48f2fe4c64a865abe5867ca6a9bf05fd6edf557e42fc8510b145bdcd118",
+        "references/security-profile.md": "0e4a9e74cfd6341f8d4da532c3392b00e64bd65a92505a15dc513f014b5330bc",
+        "references/team-debate.md": "5e0629706360a19e3a69e80c5902ea3e819c56d61251ba414b6f162e13eeb588",
+        "references/ui-rubric.md": "0badd354c875673a4e8cf3e31d99a7bede7f39c9c07c2b106cd1b713c11c78f8",
+        "references/vision-high-res-flow.md": "b9c3f989206fb3df240100a6ae976b12c1fbfbe52abf9d2aa8c2055fb8182c7f",
+        "scripts/build-opencode.js": "a8d6971bfa8b8851eedf53e34a0fa78aebc968ec25a478213f7476a99b2f2f40",
+        "scripts/ci/check-binary-source-drift.sh": "caec016f4a9928a8cf84954808e2a2c60f0c3bdaa82db9657ec984b5c22db985",
+        "scripts/ci/check-branch-alignment-ledger.sh": "1c10643fb7ecdc767fd684737a1d8f6fe37e8b086d806825c6af837be6fc7a38",
+        "scripts/ci/check-consistency.sh": "9a554e567952227089810eed1c54df29af595cffdb0a63f41f9f0682dd635012",
+        "scripts/ci/check-i18n-hookhandler-ratchet.sh": "1754ed2b4e4a297769c9dae58fc2916988a133364a0140aebb8c6b36340a9d06",
+        "scripts/codex-companion.sh": "d8f3ad97f2197965fe23dcf308144252a14a8943285133160591d5a77fff9873",
+        "scripts/cursor-companion.sh": "7a9ec83920f33155491003d82959874c39a821d9b2e63feb587f8f8354247b3b",
+        "scripts/harness-review-closeout.sh": "1adb932a9ebd44725c7090a439fd9860237b06e6e885cc5366edd0dd06e7b187",
+        "scripts/hook-handlers/skill-mirror-drift.sh": "5c4da37666fa586e01ca48173dd35ef04be500b4bdd2d6ed007ec3c34376bc97",
+        "scripts/i18n/check-translations.sh": "2952731a9273ea192e543207494bd5df284e8e7823cbb72391a9d3c65307ce25",
+        "scripts/lib/orchestration-ledger.sh": "c6d3f93b74e52bb8c57d0d74e2a1bb8937d2191204fbf10dab2a13ccbd7971bd",
+        "scripts/model-routing.sh": "e125963f328a15ff5248661a99f624cfb7414e3b164f9a7d05a4da069ea0bc1c",
+        "scripts/night-watch-install.sh": "404e9b0c98941084c0237cfe4102bebf7c71db86a81552f0d5936991a79ff24c",
+        "scripts/night-watch-report.sh": "f3417f450ab2a666a8afb87a7dc88b6e65a7d4f536498a6177e83efa74b4e238",
+        "scripts/opencode-setup-local.sh": "5813c8c442dd86e23db03b30725ccd4e33050c1ea31c93d5cda79880af43f3be",
+        "scripts/pre-review-cursor.sh": "b9484a33330157acfa4ac52ba2737c3af9423d4dfe5ae81140533fd233f581b9",
+        "scripts/resolve-impl-backend.sh": "6fd713e8fb4a63dbcf003b0e97b3e626c0109f3e04475c84f5cdf44d49de249b",
+        "scripts/review-ai-residuals.sh": "48b17a9caabd4a0cd91c650758221c2feaa115adf9611aa3a091667e487972e2",
+        "scripts/review-weak-supervision-report.sh": "cf24da01763c3374136414e23dc4fa432ecd16c0b179c36eb61864d468722c81",
+        "scripts/setup-opencode.sh": "ec46cc90043432e40da9008d4f02fef3054cb3cb9d83898bbde12db893c6381c",
+        "scripts/sync-skill-mirrors.sh": "a1200ae8749d8a172e6335df8510e7810d0e0b46bde16c39ec2b8023a5f1c7d1",
+        "scripts/validate-opencode.js": "7b65708856ad3b2d8fc077ff11bb61357d1d9ec30b68a5fa4800406a7b5f210f"
+      },
+      "missing_scripts": [],
+      "unresolved": [
+        "${CLAUDE_PLUGIN_ROOT}",
+        "${CLAUDE_SKILL_DIR}"
+      ]
+    },
+    "harness-setup": {
+      "files": {
+        "SKILL.md": "7d4dc79c915771d2639d604144b738284f694d13fa1104f0c08edf3838d637af",
+        "references/ci.md": "0f648f1626791549050ea44df29e5f02ba74b781668584bccf5f0b320c963118",
+        "references/codex.md": "b7e055513b2f5950a2b71ec3b4ebe8f592e312eefe0f3957159cee7ed95146af",
+        "references/cursor.md": "5c79ce72e60d83ea86910186132c41dd68ad1f81238ef061b8f6615906e331e3",
+        "references/harness-mem.md": "919cd93f520fe700f4abb92bbfb90f9dad266a879897348d5191af250a103aa7",
+        "references/init.md": "e189b2332fb29b8bdb6e356a3bce7087cb651ea799ac96c0db38f774799d8ef4",
+        "references/maintenance.md": "1df0e5641b29e76bb9c23809a7c86d39d4a67d5c32ad38843cf147cac3f47c41",
+        "references/marketplace.md": "18698e3f6b6eed9ecef262de4aa17b5a210119bc87b5bf70b6fff347776ce8c6",
+        "references/mirrors-agents-localize.md": "071341e247919f2bde3500af369183349e6cc5a82fc96ec3fe4a12266b95570d",
+        "scripts/build-opencode.js": "a8d6971bfa8b8851eedf53e34a0fa78aebc968ec25a478213f7476a99b2f2f40",
+        "scripts/ci/check-binary-source-drift.sh": "caec016f4a9928a8cf84954808e2a2c60f0c3bdaa82db9657ec984b5c22db985",
+        "scripts/ci/check-branch-alignment-ledger.sh": "1c10643fb7ecdc767fd684737a1d8f6fe37e8b086d806825c6af837be6fc7a38",
+        "scripts/ci/check-consistency.sh": "9a554e567952227089810eed1c54df29af595cffdb0a63f41f9f0682dd635012",
+        "scripts/ci/check-i18n-hookhandler-ratchet.sh": "1754ed2b4e4a297769c9dae58fc2916988a133364a0140aebb8c6b36340a9d06",
+        "scripts/codex-companion.sh": "d8f3ad97f2197965fe23dcf308144252a14a8943285133160591d5a77fff9873",
+        "scripts/codex/codex-exec-wrapper.sh": "9902da5a8281c77fe9f0eb8021c18ace29872c68fd7481c34c1cd4a81851d39a",
+        "scripts/hook-handlers/skill-mirror-drift.sh": "5c4da37666fa586e01ca48173dd35ef04be500b4bdd2d6ed007ec3c34376bc97",
+        "scripts/i18n/check-translations.sh": "2952731a9273ea192e543207494bd5df284e8e7823cbb72391a9d3c65307ce25",
+        "scripts/lib/orchestration-ledger.sh": "c6d3f93b74e52bb8c57d0d74e2a1bb8937d2191204fbf10dab2a13ccbd7971bd",
+        "scripts/night-watch-install.sh": "404e9b0c98941084c0237cfe4102bebf7c71db86a81552f0d5936991a79ff24c",
+        "scripts/night-watch-report.sh": "f3417f450ab2a666a8afb87a7dc88b6e65a7d4f536498a6177e83efa74b4e238",
+        "scripts/opencode-setup-local.sh": "5813c8c442dd86e23db03b30725ccd4e33050c1ea31c93d5cda79880af43f3be",
+        "scripts/set-impl-backend.sh": "25906d9db360581a0cecc77c38350db95b8d483b98b4663000e51c5a93627d19",
+        "scripts/setup-opencode.sh": "ec46cc90043432e40da9008d4f02fef3054cb3cb9d83898bbde12db893c6381c",
+        "scripts/sync-skill-mirrors.sh": "a1200ae8749d8a172e6335df8510e7810d0e0b46bde16c39ec2b8023a5f1c7d1",
+        "scripts/validate-opencode.js": "7b65708856ad3b2d8fc077ff11bb61357d1d9ec30b68a5fa4800406a7b5f210f"
+      },
+      "missing_scripts": [],
+      "unresolved": [
+        "${CLAUDE_EFFORT}"
+      ]
+    },
+    "harness-sync": {
+      "files": {
+        "SKILL.md": "9667feb57a02b47006cf45b74ac1a402d4256b3fa5353b90ae2e2ac8d6fc8523",
+        "scripts/config-utils.sh": "007183d5ceac9df8c8ce5016d989f1bc0b0d1d79c5f39b6e06bfe7e250758d99",
+        "scripts/plan-registry.sh": "70a27a8f8722c52cc48e73f577780d98e0a6da2a036ba6e72d21aa64d221063b"
+      },
+      "missing_scripts": [],
+      "unresolved": []
+    },
+    "harness-work": {
+      "files": {
+        "SKILL.md": "83409f6bea23ba171fe3338c452a411ac3b46c4b94ee9ff443208519383ea89c",
+        "references/backend-selection.md": "96319b5faa66b6f9a9aee87e8c5f2e9a13f48a6cb02b4f0e630a2416dd268da0",
+        "references/codex-cli-only.md": "fa491c59b7df821c18b222fd658e9183363fa9f4246e9aef84d16ae2d9193e2a",
+        "references/completion-report.md": "34960727800c5ea1c9f8efb851e27f44234fa0fde5f9d05f1d071e3ff784b21c",
+        "references/effort-routing.md": "9f0f3336829cec748e6c6eeae0c73316e719ef2c8103aeddfd7e0aa4c0cd1537",
+        "references/execution-modes.md": "543f6371605965724bff65e0b908c0ef97879f529eee5985dee1c475afab780f",
+        "references/failure-reticketing.md": "230e30a5856daa8e706064e0a9c26007f5d1a808936edee5cb79aa0cc69b5f3e",
+        "references/review-loop.md": "5d4f6e40b2863f264eb42bdb4e4d57a8c36e4031341793320c007aef0bf36b4d",
+        "references/sprint-contract.md": "a0010525a1a3d9d99f5bf9cdb2867f31ad9388db7ab110d5d654a65868d473d2",
+        "scripts/auto-checkpoint.sh": "d4923e831f41b317edb3f2fe4f4ed54768c72a69e47b99d4491f0cc00c84f75c",
+        "scripts/build-opencode.js": "a8d6971bfa8b8851eedf53e34a0fa78aebc968ec25a478213f7476a99b2f2f40",
+        "scripts/ci/check-binary-source-drift.sh": "caec016f4a9928a8cf84954808e2a2c60f0c3bdaa82db9657ec984b5c22db985",
+        "scripts/ci/check-branch-alignment-ledger.sh": "1c10643fb7ecdc767fd684737a1d8f6fe37e8b086d806825c6af837be6fc7a38",
+        "scripts/ci/check-consistency.sh": "9a554e567952227089810eed1c54df29af595cffdb0a63f41f9f0682dd635012",
+        "scripts/ci/check-i18n-hookhandler-ratchet.sh": "1754ed2b4e4a297769c9dae58fc2916988a133364a0140aebb8c6b36340a9d06",
+        "scripts/codex-companion.sh": "d8f3ad97f2197965fe23dcf308144252a14a8943285133160591d5a77fff9873",
+        "scripts/config-utils.sh": "007183d5ceac9df8c8ce5016d989f1bc0b0d1d79c5f39b6e06bfe7e250758d99",
+        "scripts/cursor-companion.sh": "7a9ec83920f33155491003d82959874c39a821d9b2e63feb587f8f8354247b3b",
+        "scripts/generate-sprint-contract.js": "37c5f1c2bb3709758fb54cf7112416bd38bd1df7b3b1dba22c421d60e67617be",
+        "scripts/harness-pr-closeout.sh": "87810996bea6d9d16bbddc6bb3fbba68a81a77f20748d318b68c60c71647b01b",
+        "scripts/hook-handlers/skill-mirror-drift.sh": "5c4da37666fa586e01ca48173dd35ef04be500b4bdd2d6ed007ec3c34376bc97",
+        "scripts/i18n/check-translations.sh": "2952731a9273ea192e543207494bd5df284e8e7823cbb72391a9d3c65307ce25",
+        "scripts/lib/orchestration-ledger.sh": "c6d3f93b74e52bb8c57d0d74e2a1bb8937d2191204fbf10dab2a13ccbd7971bd",
+        "scripts/log-tdd-red.sh": "30e40bb2a96f81eccab1aefe9f60ef5e6c794c4ccfcadbf582890fc24b6827bc",
+        "scripts/model-routing.sh": "e125963f328a15ff5248661a99f624cfb7414e3b164f9a7d05a4da069ea0bc1c",
+        "scripts/night-watch-install.sh": "404e9b0c98941084c0237cfe4102bebf7c71db86a81552f0d5936991a79ff24c",
+        "scripts/night-watch-report.sh": "f3417f450ab2a666a8afb87a7dc88b6e65a7d4f536498a6177e83efa74b4e238",
+        "scripts/opencode-setup-local.sh": "5813c8c442dd86e23db03b30725ccd4e33050c1ea31c93d5cda79880af43f3be",
+        "scripts/plan-preapproval.sh": "30d56a04dc573767e8070fca7468c44978d74ee1e931d8992a2a1ac1551487e1",
+        "scripts/repair-loop-state.sh": "50e972c1293dc2625936ff01ce8cd59969ca432a7f706394f13dfc3b3b54fc85",
+        "scripts/resolve-impl-backend.sh": "6fd713e8fb4a63dbcf003b0e97b3e626c0109f3e04475c84f5cdf44d49de249b",
+        "scripts/review-ai-residuals.sh": "48b17a9caabd4a0cd91c650758221c2feaa115adf9611aa3a091667e487972e2",
+        "scripts/run-contract-review-checks.sh": "74fc976fd0237a14b079610950fb7e1021445ca83f65c4d2e7a0b1fdbcc47c38",
+        "scripts/setup-opencode.sh": "ec46cc90043432e40da9008d4f02fef3054cb3cb9d83898bbde12db893c6381c",
+        "scripts/sync-skill-mirrors.sh": "a1200ae8749d8a172e6335df8510e7810d0e0b46bde16c39ec2b8023a5f1c7d1",
+        "scripts/validate-opencode.js": "7b65708856ad3b2d8fc077ff11bb61357d1d9ec30b68a5fa4800406a7b5f210f",
+        "scripts/write-review-result.sh": "6aca9292e2c972219694ac1db0df09107176a1c8137adb2239bb055fe26c73c7"
+      },
+      "missing_scripts": [],
+      "unresolved": [
+        "${CLAUDE_PLUGIN_ROOT}",
+        "${CLAUDE_SKILL_DIR}"
+      ]
+    }
+  },
+  "upstream": {
+    "repo": "https://github.com/Chachamaru127/claude-code-harness.git",
+    "sha": "2b2b74805321089bd9b660a1064fa97556299703",
+    "tag": "v5.15.0"
+  }
+}

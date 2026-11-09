@@ -53,3 +53,14 @@ plugins/.install-metadata.json.lock
 # OS cruft
 .DS_Store
 Thumbs.db
+
+# Python tooling
+__pycache__/
+*.pyc
+.venv/
+.ruff_cache/
+
+# Local session state
+.claude/
+.harness-worktrees/
+out/
