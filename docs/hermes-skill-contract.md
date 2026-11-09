@@ -17,10 +17,13 @@ Hermes version for every `source-read` claim: v0.22.6.
 | Extra frontmatter keys (for example `allowed-tools`, `kind`) are tolerated. | unknown |
 | No `${...}` variable is substituted in skill text. A footer note tells the agent to resolve relative paths against the skill's absolute directory. | source-read |
 | Support directories next to `SKILL.md` (for example `references/`, `scripts/`) are recognised as skill support paths. | source-read |
-| `hermes profile install` and `update` copy nested skill files. A directory inside a skill, such as `scripts/`, belongs to that skill. | source-read |
-| Distributions are copied with `shutil.copytree` and `copy2`, which keep file modes. | source-read |
+| `hermes profile install` and `update` copy nested skill files. A directory inside a skill, such as `scripts/`, belongs to that skill. | observed (v0.22.6): all 171 generated files installed, `references/` and `scripts/` included |
+| Distributions are copied with `shutil.copytree` and `copy2`, which keep file modes. | observed (v0.22.6): 120 of 120 executable files stayed executable |
 | A distribution containing any symlink is rejected. | source-read |
-| `skills/<category>/` directories are merged per authored root. Each skill directory is replaced whole, so files upstream removed from a skill disappear. A skill dropped from the profile is not deleted from an existing device. | source-read |
+| `skills/<category>/` directories are merged per authored root. Each skill directory is replaced whole, so files upstream removed from a skill disappear. A skill dropped from the profile is not deleted from an existing device. | observed (v0.22.6): a removed reference file disappeared, a new one appeared, a dropped skill stayed |
+| `hermes skills list` shows the installed skills under the `harness` category as enabled. | observed (v0.22.6): all 8 listed |
+| `hermes profile update` states that `config.yaml` is preserved unless `--force-config` is given. | observed (v0.22.6) |
+| `hermes profile install` and `update` ask for confirmation and cancel without a TTY unless `-y` is passed. | observed (v0.22.6) |
 
 Consequence for translation: rewrite `${CLAUDE_SKILL_DIR}` and plugin-root
 lookups into paths relative to the skill directory, and bundle referenced
@@ -67,6 +70,9 @@ skill references.
 
 ## Runtime verification
 
-Not yet run. The `hermes` command cannot start inside the sandbox used so far,
-because it needs write access to its install lock. Every `unknown` row stays
-`unknown` until it is exercised on a device where Hermes runs.
+Run on Hermes v0.22.6 (2026.9.24), Linux, with a scratch profile installed
+from a local clone of this repo and deleted afterwards. Observed: install,
+skill discovery and the update path (rows above). Not observed: running a
+harness skill through a model, slash command invocation, extra frontmatter
+keys (the generator drops them), and plugin hooks. Those rows stay `unknown`
+until exercised with a configured model provider.

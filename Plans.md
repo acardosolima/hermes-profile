@@ -46,8 +46,8 @@ is `unknown`, not absent.
 
 | Task | Content | DoD | Depends | Status |
 |------|---------|-----|---------|--------|
-| 4.1 | [lane:release] [tdd:skip:manual-device-smoke] On a device with Hermes, install the profile into a scratch profile name and run `hermes skills list`. Invoke `/harness-plan` and `/harness-review` on a throwaway repo. | Skills listed. Both commands start and reach their first tool call. Result recorded in `docs/hermes-skill-contract.md` with the Hermes version. | 2.5 | cc:TODO |
-| 4.2 | [lane:release] [tdd:skip:manual-device-smoke] Update path: bump the lock to a newer tag in a branch, run `hermes profile update` on the scratch profile. | Installed `GENERATED.json` shows the new tag. Files upstream removed from a skill are gone. A skill dropped from the allow-list is documented as a manual removal, because update does not delete it. | 4.1, 3.1 | cc:TODO |
+| 4.1 | [lane:release] [tdd:skip:manual-device-smoke] On a device with Hermes, install the profile into a scratch profile name and run `hermes skills list`. Invoke `/harness-plan` and `/harness-review` on a throwaway repo. | Skills listed. Both commands start and reach their first tool call. Result recorded in `docs/hermes-skill-contract.md` with the Hermes version. Install and discovery observed on v0.22.6; running a command needs a model provider and is still open. | 2.5 | cc:WIP |
+| 4.2 | [lane:release] [tdd:skip:manual-device-smoke] Update path: bump the lock to a newer tag in a branch, run `hermes profile update` on the scratch profile. | Installed `GENERATED.json` shows the new tag. Files upstream removed from a skill are gone. A skill dropped from the allow-list is documented as a manual removal, because update does not delete it. Observed on v0.22.6 with a simulated change; the bump-driven path waits on 3.1. | 4.1, 3.1 | cc:WIP |
 | 4.3 | [lane:fast] [tdd:skip:docs-only] Parity matrix in the contract doc: what works, degrades or is absent on Hermes versus Claude Code. | Each row cites 0.1, 0.2 or 4.1 evidence. No row claims enforcement parity. | 4.1 | cc:TODO |
 
 ## Phase 5: Guard hook
