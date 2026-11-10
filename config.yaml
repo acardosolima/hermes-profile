@@ -177,7 +177,6 @@ model:
 platform_toolsets:
   cli:
     - clarify
-    - code_execution
     - delegation
     - file
     - skills
@@ -307,6 +306,7 @@ _left_core_scoped:
 plugins:
   enabled:
     - homeassistant
+    - harness-guard
   disabled: []
 _left_core_installed:
   - homeassistant

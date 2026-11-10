@@ -60,6 +60,9 @@ _PLUGIN_SCRIPTS_RE = re.compile(
 )
 _UNRESOLVED_TOKEN_RE = re.compile(r"\$\{(CLAUDE_[A-Z0-9_]+)")
 _RELEASE_TAG_RE = re.compile(r"v(\d+)\.(\d+)\.(\d+)")
+_GUARD_BINARY_RE = re.compile(r"harness-(linux|darwin|windows)-(amd64|arm64)(?:\.exe)?")
+_GUARD_RULE_ID_RE = re.compile(r'ID:\s+"(R\d+:[a-z0-9-]+)"')
+GUARD_LOCK_PATH = "plugins/harness-guard/binaries.lock.json"
 _SCRIPT_TOKEN_RE = re.compile(r"scripts/([A-Za-z0-9_][A-Za-z0-9_./-]*)")
 
 _SECRET_PATTERNS = (
@@ -617,6 +620,59 @@ def check(upstream_root, lock, target):
     return [f"{kind} {rel}" for rel, kind in sorted(diffs.items())]
 
 
+def guard_lock(upstream_root, lock):
+    """Bytes of the guard lock: pinned binary hashes and upstream rule ids."""
+    upstream_root = Path(upstream_root)
+    bin_dir = upstream_root / "bin"
+    binaries = {}
+    if bin_dir.is_dir():
+        for path in sorted(bin_dir.iterdir()):
+            match = _GUARD_BINARY_RE.fullmatch(path.name)
+            if not match:
+                continue
+            if path.is_symlink():
+                raise TranslateError(f"symlink not allowed: {path}")
+            content = _read_bytes_within(path, upstream_root)
+            binaries[f"{match.group(1)}-{match.group(2)}"] = {
+                "file": f"bin/{path.name}",
+                "sha256": hashlib.sha256(content).hexdigest(),
+            }
+    rules_path = upstream_root / "go" / "internal" / "policy" / "rules.go"
+    rules = []
+    if rules_path.is_file() and not rules_path.is_symlink():
+        text = _decode_text(_read_bytes_within(rules_path, upstream_root), rules_path)
+        rules = sorted(set(_GUARD_RULE_ID_RE.findall(text)))
+    manifest = {
+        "binaries": binaries,
+        "repo": lock["repo"],
+        "rules": rules,
+        "sha": lock["sha"],
+        "tag": lock["tag"],
+    }
+    return (json.dumps(manifest, indent=2, sort_keys=True) + "\n").encode("utf-8")
+
+
+def write_guard_lock(content, path):
+    """Replace the guard lock file with `content`, creating parents."""
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    staging = path.with_name(path.name + ".tmp")
+    with open(staging, "wb") as handle:
+        handle.write(content)
+    os.replace(staging, path)
+
+
+def check_guard_lock(upstream_root, lock, path):
+    """Diff lines for the guard lock file against what the lock would generate."""
+    path = Path(path)
+    expected = guard_lock(upstream_root, lock)
+    if not path.is_file():
+        return [f"added {path.as_posix()}"]
+    if path.read_bytes() != expected:
+        return [f"changed {path.as_posix()}"]
+    return []
+
+
 def scan_secrets(files):
     """Raise ``SecretFoundError`` if any text file matches a secret pattern."""
     for relpath in sorted(files):
@@ -642,6 +698,7 @@ def _build_parser():
         cmd_parser.add_argument("--lock", default="upstream.lock")
         cmd_parser.add_argument("--out", default="skills/harness")
         cmd_parser.add_argument("--source", default=None)
+        cmd_parser.add_argument("--guard-lock", default=GUARD_LOCK_PATH)
     bump_parser = sub.add_parser("bump", help="Move upstream.lock to the newest release tag.")
     bump_parser.add_argument("--lock", default="upstream.lock")
     bump_parser.add_argument("--tag", default=None)
@@ -666,10 +723,13 @@ def main(argv):
             if args.command == "sync":
                 files = generate(upstream_root, lock)
                 scan_secrets(files)
+                guard = guard_lock(upstream_root, lock)
                 write_output(files, args.out)
+                write_guard_lock(guard, args.guard_lock)
                 return 0
 
             diffs = check(upstream_root, lock, args.out)
+            diffs += check_guard_lock(upstream_root, lock, args.guard_lock)
             for line in diffs:
                 print(line)
             return 1 if diffs else 0

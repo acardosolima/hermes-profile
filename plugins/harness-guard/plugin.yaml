@@ -1,0 +1,10 @@
+name: harness-guard
+version: "0.1.0"
+description: >
+  Enforces the claude-code-harness guardrail rules on Hermes tool calls. Maps
+  terminal, read_file, write_file and patch calls to the harness payload shape,
+  asks the pinned upstream policy binary for a verdict, and blocks or escalates
+  to the human approval gate. Fails closed when the binary is unavailable.
+author: hermes-profile
+provides_hooks:
+  - pre_tool_call

@@ -1,0 +1,41 @@
+{
+  "binaries": {
+    "darwin-amd64": {
+      "file": "bin/harness-darwin-amd64",
+      "sha256": "12dc36bd7ab94a0a8e593e9c0c22d58f280b1977ffd5acb007f403a7e42b691c"
+    },
+    "darwin-arm64": {
+      "file": "bin/harness-darwin-arm64",
+      "sha256": "f602fb78ca4f89b74987afd86821de6afd60f05d66df1c1985e834b97e3ba597"
+    },
+    "linux-amd64": {
+      "file": "bin/harness-linux-amd64",
+      "sha256": "b1bc5bcb5e7f5ef3fab9fd237d11a9ee9e9414f9f4760f4282bda44f5e7d9b53"
+    },
+    "windows-amd64": {
+      "file": "bin/harness-windows-amd64.exe",
+      "sha256": "dd848e0d4dfd241cde84f0023ef61bb7c4021df151773f94bd7ef3a9cf3318a2"
+    }
+  },
+  "repo": "https://github.com/Chachamaru127/claude-code-harness.git",
+  "rules": [
+    "R01:no-sudo",
+    "R02:no-write-protected-paths",
+    "R03:no-bash-write-protected-paths",
+    "R04:confirm-write-outside-project",
+    "R05:confirm-rm-rf",
+    "R06:no-force-push",
+    "R07:codex-mode-no-write",
+    "R08:breezing-reviewer-no-write",
+    "R09:warn-secret-file-read",
+    "R10:no-git-bypass-flags",
+    "R11:no-reset-hard-protected-branch",
+    "R12:confirm-direct-push-protected-branch",
+    "R13:warn-protected-review-paths",
+    "R14:test-required-for-src-write",
+    "R15:no-stage-secret-file",
+    "R16:no-self-approve-deferred"
+  ],
+  "sha": "c2304c325d4432f51d632e0586d886767b0f41ea",
+  "tag": "v5.16.0"
+}
