@@ -1,7 +1,7 @@
 ---
 name: "harness-plan"
 description: "HAR: Research-backed, team-validated task planning, Plans.md management, progress sync. Trigger: create a plan, add tasks, update Plans.md, mark complete, check progress. Do NOT load for: implementation, review, release."
-version: "v5.15.0"
+version: "v5.16.0"
 platforms: [linux, macos, windows]
 ---
 

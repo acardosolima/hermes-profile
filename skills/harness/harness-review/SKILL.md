@@ -1,7 +1,7 @@
 ---
 name: "harness-review"
 description: "HAR: Multi-angle code, plan, scope review. Security/quality check. Trigger: review, code review, plan review, scope analysis. Do NOT load for: implementation, new features, bugfix, setup, release."
-version: "v5.15.0"
+version: "v5.16.0"
 platforms: [linux, macos, windows]
 ---
 

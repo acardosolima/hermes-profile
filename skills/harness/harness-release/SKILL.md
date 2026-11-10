@@ -1,7 +1,7 @@
 ---
 name: "harness-release"
 description: "Generic release automation for projects using Keep a Changelog + GitHub. Single confirmation gate then end-to-end automation: bump detection, CHANGELOG promotion, PR/main merge, tag, GitHub Release. Trigger: release, version bump, publish. Do NOT load for: implementation, review, planning, setup."
-version: "v5.15.0"
+version: "v5.16.0"
 platforms: [linux, macos, windows]
 ---
 
