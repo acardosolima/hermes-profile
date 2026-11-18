@@ -12,6 +12,22 @@ cp ~/.hermes/profiles/master/.env.EXAMPLE ~/.hermes/profiles/master/.env
 # none are required; leave the rest blank
 ```
 
+On Windows, `HERMES_HOME` is `%LOCALAPPDATA%\hermes`, not `~/.hermes`. The
+installer prints the real profile path — use that, not the `~/.hermes` path
+above. A profile with no `auth.json` reads the default profile's login, so
+you do not copy keys when that login already exists.
+
+Shell scripts are stored as LF. Bash requires that on Linux, macOS, and
+Windows. Git on Windows would otherwise check them out as CRLF, and install
+copies that working tree, so the hooks fail on every system that runs them
+with bash.
+
+`hermes profile use master` is what makes a new terminal's `hermes` open this
+profile. `--alias` also writes `%USERPROFILE%\.local\bin\master.bat`. Command
+Prompt and PowerShell run that file when you type `master`. Git Bash does not:
+it looks for a program named `master` and does not append `.bat`. You do not
+need the alias.
+
 Per-device setup:
 
 `config.yaml` ships with `model.provider: anthropic` / `delegation.provider:
@@ -29,45 +45,34 @@ hermes config set delegation.provider openrouter
 hermes config set delegation.model <model-id>
 ```
 
+The provider id must be the one `hermes auth list` shows. An xAI OAuth login
+is `xai-oauth`, not `xai`. `xai` only looks for `XAI_API_KEY` and fails even
+when OAuth is already logged in on the default profile. Observed on Windows
+with Hermes v0.23.2: `model.provider xai` returned "No usable credentials";
+`xai-oauth` with `grok-4.7` answered.
+
 ### skill_manage guard hook (per-device activation)
 
 This profile ships `agent-hooks/gate-skill-manage.py`, a `pre_tool_call`
 shell hook that blocks the agent from calling `skill_manage` (create/patch/
 delete a skill) — reading/discovering skills (`skill_view`, `skills_list`,
-auto-loaded skills) is unaffected. `config.yaml` does NOT hardcode the
-`hooks:` block pointing at it, because the hook `command` is a literal path
-with no variable expansion and `HERMES_HOME` differs per device (notably:
-on at least one Windows install, `HERMES_HOME` is
-`%LOCALAPPDATA%\hermes`, NOT `~/.hermes` — verify with `hermes doctor`
-before assuming either).
+auto-loaded skills) is unaffected. The hook command is a literal path with
+no variable expansion, and the profile directory is not the same on Linux,
+macOS, and Windows, so `config.yaml` does not store it.
 
-After `hermes profile install` / `hermes profile update`, point this
-device's own config at its own absolute script path:
+After `hermes profile install` or `hermes profile update`, run this from the
+repo. It asks Hermes where this machine's profile is, writes that path into
+this machine's config, and allowlists it. The path is not committed.
 
 ```bash
-hermes config set hooks.pre_tool_call '[{"matcher": "skill_manage", "command": "python <ABSOLUTE_PATH_TO_PROFILE>/agent-hooks/gate-skill-manage.py", "timeout": 5, "fail_closed": true}]'
+python agent-hooks/activate.py --profile master
+hermes -p master hooks doctor
 ```
 
-Then approve the hook. The classic CLI prompts interactively on first use;
-the Desktop app and gateway never prompt (no TTY), so on those surfaces
-write the allowlist entry by hand — `~/.hermes/shell-hooks-allowlist.json`
-relative to the ACTUAL `HERMES_HOME` for this install, not a literal `~/.hermes`:
-
-```json
-{
-  "approvals": [
-    {
-      "event": "pre_tool_call",
-      "command": "python <ABSOLUTE_PATH_TO_PROFILE>/agent-hooks/gate-skill-manage.py"
-    }
-  ]
-}
-```
-
-Verify with `hermes hooks doctor` (expect "allowlisted" + valid JSON on the
-synthetic payload). A hook added to an already-running Desktop/gateway
-session does not reliably hot-reload — open a new chat/session before
-trusting the block.
+On Windows Hermes runs the `.py` file with its own interpreter. On Linux and
+macOS the script's shebang is used. A hook added to an already-running
+Desktop or gateway session does not reliably hot-reload — open a new chat
+before trusting the block.
 
 ### Harness skills (generated)
 
@@ -196,8 +201,11 @@ Known gaps, so you can judge the risk:
 - On Windows, upstream's check that stops `git add` of a secret file does not
   fire, because its pattern needs a `/` before the file name and Windows paths use
   backslashes. The test table pins this as a known gap.
-- Verified live on Linux only. macOS and Windows are covered by the offline
-  conformance tests in CI, not by a live Hermes session.
+- Verified live on Linux (Hermes v0.22.6) and on Windows (Hermes v0.23.2).
+  On Windows the offline table passed 52/52, and a live session blocked sudo,
+  force-push, a direct push to main, `cat .env`, and a write outside the
+  project. An allowed `echo` through the guard passed on retry after xAI
+  returned 403 during a burst of live calls. macOS still has no live session.
 
 Update after a push:
 
