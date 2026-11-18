@@ -18,7 +18,6 @@ agent:
     - kanban
     - memory
     - project
-    - search
     - session_search
     - spotify
     - stt
@@ -296,6 +295,8 @@ tool_loop_guardrails:
 toolsets:
   - hermes-cli
   - web
+web:
+  extract_backend: keenable
 updates:
   backup_keep: 5
   check: true
