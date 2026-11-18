@@ -100,6 +100,26 @@ paths, unjudgeable calls, protected references, directory lookup),
 `plugins/harness-guard/acceptance.py --live` passed 50 of 50 checks on a fresh
 install. Not observed: executing the bundled shell scripts through Hermes, an
 end to end `/harness-plan create` or `/harness-work` run, extra frontmatter keys
-(the generator drops them), the guard on macOS and Windows with a live Hermes,
+(the generator drops them), the guard on macOS with a live Hermes,
 and `execute_code` or `delegate_task` calls, which the guard does not inspect.
-Those rows stay `unknown`.
+Those rows stay `unknown`. The Windows guard is recorded below.
+
+Run on Hermes v0.23.2 (2026.9.24), Windows 11, profile `master` installed
+from `C:\Users\Adriano\Documents\hermes-profile` and left in place. Observed:
+install copied the distribution-owned tree (69 skills, both plugins, the
+skill_manage hook) and wrote no `.env` or `auth.json`. `hermes profile use`
+made it the sticky profile. A profile with no `auth.json` reads the default
+profile's login. Provider `xai` does not see an `xai-oauth` login; provider
+`xai-oauth` with model `grok-4.7` answered `pong`. The skill_manage hook,
+pointed at the profile's absolute script path and allowlisted beside that
+profile's `config.yaml`, exited 2 for `skill_manage` and passed
+`hermes hooks doctor`. `acceptance.py` passed 52/52 against
+`harness-windows-amd64.exe`. `acceptance.py --live master` passed the block
+cases (sudo, force push, push to main, secret read, write outside the
+project). The allow-echo case returned xAI 403 on that run; the same command
+retried alone returned `acceptance-ok`. `--alias` writes `master.bat`.
+Command Prompt runs it as `master`. Git Bash does not. Shell scripts outside
+`skills/harness/` were CRLF in the Windows working tree (`core.autocrlf=true`)
+while the git blobs were LF; install copies the working tree, so those
+scripts need `eol=lf`. Not observed on Windows: executing the bundled helper
+scripts, `/harness-plan` or `/harness-work` through a model.
