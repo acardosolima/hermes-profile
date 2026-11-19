@@ -121,5 +121,50 @@ retried alone returned `acceptance-ok`. `--alias` writes `master.bat`.
 Command Prompt runs it as `master`. Git Bash does not. Shell scripts outside
 `skills/harness/` were CRLF in the Windows working tree (`core.autocrlf=true`)
 while the git blobs were LF; install copies the working tree, so those
-scripts need `eol=lf`. Not observed on Windows: executing the bundled helper
-scripts, `/harness-plan` or `/harness-work` through a model.
+scripts need `eol=lf`. Helper-script entry points were probed later; see
+"Helper scripts". Not observed on Windows: `/harness-plan` or `/harness-work`
+through a model.
+
+## Parity: Claude Code versus Hermes
+
+No row claims the guard enforces the same rules as Claude Code. Evidence is
+the skill contract (task 0.1), the tool mapping (task 0.2), or the live skill
+runs (task 4.1).
+
+| Capability | On Hermes | Evidence |
+|------------|-----------|----------|
+| Skill text and bundled `references/` and `scripts/` install and list | works | 4.1: 8 harness skills listed; nested files copied |
+| `/harness-plan sync` and `/harness-review` start and call tools | works | 4.1, Hermes v0.22.6 |
+| `Bash` | works as `terminal`, then judged by the guard plugin | 0.2 mapped; guard is a separate plugin, not a Claude Code hook |
+| `Read` | works as `read_file` | 0.2 mapped |
+| `Write` / `Edit` | works as `write_file` / `patch` | 0.2 mapped; `patch` argument shape was unknown at mapping time |
+| `AskUserQuestion` | works as `clarify` | 0.2 mapped |
+| `WebSearch` | works only if the `web` toolset is enabled and `search` is not in `disabled_toolsets` | 0.2 mapped, toolset must be enabled |
+| `Agent` / `Task` | degraded: `delegate_task` exists; the guard does not inspect children | 0.2 degraded |
+| `ScheduleWakeup` | degraded: `cronjob` exists; this profile disables that toolset | 0.2 degraded |
+| Team monitors and Claude Code hook definitions | absent | 0.1: hooks and agent definitions are not translated |
+| Upstream Japanese prose and "Claude will summarize" lines | degraded: copied, not rewritten | 4.1 observed |
+| Helper scripts | absent as a working tool: none of 120 entry points exited 0 | 6.3 below |
+| Guard versus Claude Code hooks | not the same layer | 0.1: guardrails are only where a Hermes hook covers them |
+
+## Helper scripts
+
+120 files under `skills/harness/**/scripts/` with extensions `.sh`, `.js`,
+`.py`, or `.mjs`. On Windows, 2026-11-19, each was classified against Hermes
+v0.23.2. A script was executed only when it mentions `--help`, and then only
+with that flag. Scripts with no `--help` were not executed: their entry point
+would mutate the machine.
+
+| Verdict | Count | Meaning |
+|---------|------:|---------|
+| works | 0 | `--help` exited 0 |
+| needs `bin/harness` | 28 | file or the run mentions `bin/harness`, which is not shipped |
+| untested | 92 | not executed, or `--help` exited nonzero without naming `bin/harness` |
+
+Of the 36 scripts that were executed, 5 need `bin/harness` and 31 exited
+nonzero for another reason. None worked.
+
+Decision: keep every script. The generator copies only scripts a skill
+references, and deleting one fails the drift check. Do not treat any of them
+as working. The 28 that need `bin/harness` cannot run until that program is
+shipped. The other 92 stay untested.
