@@ -27,6 +27,7 @@ agent:
     - x_search
     - yuanbao
   fast_auto_seconds: 60
+  clarify_timeout: 0
   max_turns: 90
   personalities: {}
   reasoning_effort: medium
