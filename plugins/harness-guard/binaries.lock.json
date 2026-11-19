@@ -2,19 +2,19 @@
   "binaries": {
     "darwin-amd64": {
       "file": "bin/harness-darwin-amd64",
-      "sha256": "d27525a535a476e605df0a7b5eceef55a531dbb852e8418c7e4a1df7efe15691"
+      "sha256": "12dc36bd7ab94a0a8e593e9c0c22d58f280b1977ffd5acb007f403a7e42b691c"
     },
     "darwin-arm64": {
       "file": "bin/harness-darwin-arm64",
-      "sha256": "beb84248eaaf1e3d172fc25ef7c29d36c0a04584324d313523b97bb6cab17926"
+      "sha256": "f602fb78ca4f89b74987afd86821de6afd60f05d66df1c1985e834b97e3ba597"
     },
     "linux-amd64": {
       "file": "bin/harness-linux-amd64",
-      "sha256": "141f521c93b30fd542df3abfc541bb744175f7dbc3484b92abc1c39fb82cc523"
+      "sha256": "b1bc5bcb5e7f5ef3fab9fd237d11a9ee9e9414f9f4760f4282bda44f5e7d9b53"
     },
     "windows-amd64": {
       "file": "bin/harness-windows-amd64.exe",
-      "sha256": "b2cc024ba6a1b7c465dc4e460e3ea2cf77be41c4221945e9878cc9a1189b9673"
+      "sha256": "dd848e0d4dfd241cde84f0023ef61bb7c4021df151773f94bd7ef3a9cf3318a2"
     }
   },
   "repo": "https://github.com/Chachamaru127/claude-code-harness.git",
@@ -36,6 +36,6 @@
     "R15:no-stage-secret-file",
     "R16:no-self-approve-deferred"
   ],
-  "sha": "2b2b74805321089bd9b660a1064fa97556299703",
-  "tag": "v5.15.0"
+  "sha": "c2304c325d4432f51d632e0586d886767b0f41ea",
+  "tag": "v5.16.0"
 }

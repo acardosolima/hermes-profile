@@ -3,8 +3,8 @@
   "skills": {
     "breezing": {
       "files": {
-        "SKILL.md": "bc6c3787e9414e8bac5aa17cf27f79be50060389a746eefcfcaf5c5d4dc9a614",
-        "references/lean-path-detail.md": "2ee721ade7564fa1f267d9b2aee64fdbb2d351243aea6811874076e77a8673a0",
+        "SKILL.md": "bae598925e00312c3b40cf40383bf1cee625952ece7f4dde2be660a9511c79ba",
+        "references/lean-path-detail.md": "4c08c9dd346039b38e0044a0b7f5b645e5f2b54adf80ef6ba20f522a0aa99c8f",
         "references/monitor-and-learning.md": "8ea887369d2465a76a05f0d0a9b2240d2fb8bba01b66d60276492bc7d78cfa6c",
         "scripts/breezing-brief.sh": "1875442d2b0933e2313dd47ac391a886d28bbf1f69e386f5641ca18a616a0530",
         "scripts/codex-companion.sh": "d8f3ad97f2197965fe23dcf308144252a14a8943285133160591d5a77fff9873",
@@ -21,8 +21,8 @@
     },
     "harness-loop": {
       "files": {
-        "SKILL.md": "629403280d2cea94b54c27a784011e8bd120132f0df4252b76621eea510c3e86",
-        "references/flow.md": "e9446f214efd03d12829cf57e662c7bef6dc8bb6af66f1157e1acadc71f29607",
+        "SKILL.md": "8279968ec1b86af4bb9c94ddb41076c754fd046b913bd36be6d455f678bb55eb",
+        "references/flow.md": "08e93113f64b3838304b5e830677ab587a9f33412b278a15abb50fd6e61af26b",
         "scripts/auto-checkpoint.sh": "d4923e831f41b317edb3f2fe4f4ed54768c72a69e47b99d4491f0cc00c84f75c",
         "scripts/build-weak-supervision-cues.sh": "3b2c6a4918fccad25c81c2178eb36e33a4fc2b283abe1931f51fd3cce90f7b76",
         "scripts/codex-companion.sh": "d8f3ad97f2197965fe23dcf308144252a14a8943285133160591d5a77fff9873",
@@ -50,7 +50,7 @@
     },
     "harness-plan": {
       "files": {
-        "SKILL.md": "15bbf4986faddbd9d8f3f89fd08b8ad4b878c0a6b0311469517dda5f0fc4df02",
+        "SKILL.md": "2b29a189672bc2c0049d41a60841e3e3d078bbec0b0b43b8af196aa0b839e5e6",
         "references/create.md": "ba3f48176ca60f88f5ff03afef223c04e3102ea2a6713a20850f28c5b0ac1cfe",
         "references/criteria-design.md": "9d8782b7acedd35720452941f0acc8f0e1e6accd8b18e150b5b57ae7d234ae80",
         "references/planning-quality.md": "848616e7c543e9242370f1ef5866e2ddde8b4153b78e4dc0a0e2a41218e68226",
@@ -69,14 +69,14 @@
     },
     "harness-release": {
       "files": {
-        "SKILL.md": "b7bb22958b53f07b9bf7263794fbe0122d1f9aa44bfb9352542125d0b447fac7",
+        "SKILL.md": "b5afccf2cee0b0c7eb5a32e24e58f2312bd1721fbcfdb79b267339d7967cb010",
         "references/bump-detection.md": "7185dadd11839727e618d17d0c54fbf958c812b9e685712461c19ad7d65af5d9",
         "references/github-release.md": "9982fb53b22c35943a788ac572c1a7e447593db9adc43fb21375e865bf1cff61",
         "references/post-gate-detail.md": "b092bc4dfa9d0c1c3542f7520dd90ce49a2e6a55239114fcb6dcf7d395544bf7",
         "references/release-notes.md": "5adf15df93835399587ee13dc33ad3315c906fc5f9b0307116163577a14f8e7b",
         "references/version-files.md": "67ae51beef1c195c74131069384d3718dd3d44feef75b654d770f7f6c74352df",
         "references/versioning.md": "8ec9ca26899a1fc85f05a5d929af7a78c0fd456b6dda5008a21ef47e3ab6fdcf",
-        "scripts/build-host-plugin-dist.sh": "99e144a64162ea040de45b7965802c2c3029adc31f70b52b07297dd07461ce0c",
+        "scripts/build-host-plugin-dist.sh": "0077ade5d6f741487ac06dc30680223bd23c9b39bc98c7f6e54ca4c64d759efd",
         "scripts/build-opencode.js": "a8d6971bfa8b8851eedf53e34a0fa78aebc968ec25a478213f7476a99b2f2f40",
         "scripts/check-cch-branch-protection-policy.sh": "34a6e978f8647f5a81376238248cd43fa9bf61e4be3a5d640ca694364a099fd0",
         "scripts/check-release-version-sync.py": "667eb580653aafb45c4257885d8ed214849fc8730866c10c72b63283d79e2c91",
@@ -86,12 +86,12 @@
         "scripts/lib/host-registry.sh": "b6c82b3942bcaddecfd78f25816e751884dd26c64b18b21cf8e6aa5d7add41f2",
         "scripts/lib/orchestration-ledger.sh": "c6d3f93b74e52bb8c57d0d74e2a1bb8937d2191204fbf10dab2a13ccbd7971bd",
         "scripts/model-routing.sh": "e125963f328a15ff5248661a99f624cfb7414e3b164f9a7d05a4da069ea0bc1c",
-        "scripts/opencode-setup-local.sh": "5813c8c442dd86e23db03b30725ccd4e33050c1ea31c93d5cda79880af43f3be",
+        "scripts/opencode-setup-local.sh": "067ef4599cd4670bf2c05bfefadff8140e770bc4bf7d09aa37a682eb924d3454",
         "scripts/release-preflight-host-smoke.sh": "c54b6f9012db82ccb9abe61390bfb5b88d24e6090d09bf32ecc6873fcaee8d43",
         "scripts/release-preflight.sh": "3e74fceef228d85d28ee3cd12e536bd7c815624550cf398cb7f64204cef794c1",
         "scripts/release-verify-publish.sh": "a0da465a64ecdcfccc76b569913ce833eaabb1496e177c59c72f96f061412954",
-        "scripts/setup-cursor.sh": "2c7c141723a7ad527adc6eeb617b7b070b9e5959459639c544afa8cb62ad1e2b",
-        "scripts/setup-grok.sh": "f18f6e5720471101bca9c7c59d0e664fee22ef03126de1a9f3144dcf5011ef25",
+        "scripts/setup-cursor.sh": "6d985484ab927d17894ac28ec46e9d8d828944879b62e00e967f9d2927fddb52",
+        "scripts/setup-grok.sh": "50b2b08eeacabe2b827fcba7c713f02f862298989644322a8497709962f4fd3e",
         "scripts/setup-opencode.sh": "ec46cc90043432e40da9008d4f02fef3054cb3cb9d83898bbde12db893c6381c",
         "scripts/sync-skill-mirrors.sh": "a1200ae8749d8a172e6335df8510e7810d0e0b46bde16c39ec2b8023a5f1c7d1",
         "scripts/sync-version.sh": "b56a1a66e22fdb47dc24335bae6639ab2168c801bdce6bc53728ec5d77aaf4e2",
@@ -104,7 +104,7 @@
     },
     "harness-review": {
       "files": {
-        "SKILL.md": "93379c7640ca08339086df13ffea7648e1ff40c4297decffd10b5925a9dbde2e",
+        "SKILL.md": "a9d56b52e68c4d92da7eed33e3d031fb57fded47bd402dd543ba96f379c58642",
         "references/blind-judge.md": "2cbad2cdcf38ece3c05506c0e8427a28530a39a5868b856ee6074f4b04ac282b",
         "references/code-review.md": "89a7fc95d6f39d60bd4131269b3fd763ad957e5301d7d8876dd15ddb3b8f4dc1",
         "references/codex-closeout.md": "06be5b85ec676ead180c50877c7898ed67f375c23014a1836bda13a5095aa26e",
@@ -131,7 +131,7 @@
         "scripts/model-routing.sh": "e125963f328a15ff5248661a99f624cfb7414e3b164f9a7d05a4da069ea0bc1c",
         "scripts/night-watch-install.sh": "404e9b0c98941084c0237cfe4102bebf7c71db86a81552f0d5936991a79ff24c",
         "scripts/night-watch-report.sh": "f3417f450ab2a666a8afb87a7dc88b6e65a7d4f536498a6177e83efa74b4e238",
-        "scripts/opencode-setup-local.sh": "5813c8c442dd86e23db03b30725ccd4e33050c1ea31c93d5cda79880af43f3be",
+        "scripts/opencode-setup-local.sh": "067ef4599cd4670bf2c05bfefadff8140e770bc4bf7d09aa37a682eb924d3454",
         "scripts/pre-review-cursor.sh": "b9484a33330157acfa4ac52ba2737c3af9423d4dfe5ae81140533fd233f581b9",
         "scripts/resolve-impl-backend.sh": "6fd713e8fb4a63dbcf003b0e97b3e626c0109f3e04475c84f5cdf44d49de249b",
         "scripts/review-ai-residuals.sh": "48b17a9caabd4a0cd91c650758221c2feaa115adf9611aa3a091667e487972e2",
@@ -148,7 +148,7 @@
     },
     "harness-setup": {
       "files": {
-        "SKILL.md": "7d4dc79c915771d2639d604144b738284f694d13fa1104f0c08edf3838d637af",
+        "SKILL.md": "68e479f88a75e476d357a86c1e2a979ec79f1485323fb6200a16201bf5700ca2",
         "references/ci.md": "0f648f1626791549050ea44df29e5f02ba74b781668584bccf5f0b320c963118",
         "references/codex.md": "b7e055513b2f5950a2b71ec3b4ebe8f592e312eefe0f3957159cee7ed95146af",
         "references/cursor.md": "5c79ce72e60d83ea86910186132c41dd68ad1f81238ef061b8f6615906e331e3",
@@ -169,7 +169,7 @@
         "scripts/lib/orchestration-ledger.sh": "c6d3f93b74e52bb8c57d0d74e2a1bb8937d2191204fbf10dab2a13ccbd7971bd",
         "scripts/night-watch-install.sh": "404e9b0c98941084c0237cfe4102bebf7c71db86a81552f0d5936991a79ff24c",
         "scripts/night-watch-report.sh": "f3417f450ab2a666a8afb87a7dc88b6e65a7d4f536498a6177e83efa74b4e238",
-        "scripts/opencode-setup-local.sh": "5813c8c442dd86e23db03b30725ccd4e33050c1ea31c93d5cda79880af43f3be",
+        "scripts/opencode-setup-local.sh": "067ef4599cd4670bf2c05bfefadff8140e770bc4bf7d09aa37a682eb924d3454",
         "scripts/set-impl-backend.sh": "25906d9db360581a0cecc77c38350db95b8d483b98b4663000e51c5a93627d19",
         "scripts/setup-opencode.sh": "ec46cc90043432e40da9008d4f02fef3054cb3cb9d83898bbde12db893c6381c",
         "scripts/sync-skill-mirrors.sh": "a1200ae8749d8a172e6335df8510e7810d0e0b46bde16c39ec2b8023a5f1c7d1",
@@ -182,7 +182,7 @@
     },
     "harness-sync": {
       "files": {
-        "SKILL.md": "9667feb57a02b47006cf45b74ac1a402d4256b3fa5353b90ae2e2ac8d6fc8523",
+        "SKILL.md": "7fa961a2c26383b644d8649b1918d29152e695bd656ea2c3f2d083df6bf50d88",
         "scripts/config-utils.sh": "007183d5ceac9df8c8ce5016d989f1bc0b0d1d79c5f39b6e06bfe7e250758d99",
         "scripts/plan-registry.sh": "70a27a8f8722c52cc48e73f577780d98e0a6da2a036ba6e72d21aa64d221063b"
       },
@@ -191,12 +191,12 @@
     },
     "harness-work": {
       "files": {
-        "SKILL.md": "83409f6bea23ba171fe3338c452a411ac3b46c4b94ee9ff443208519383ea89c",
-        "references/backend-selection.md": "96319b5faa66b6f9a9aee87e8c5f2e9a13f48a6cb02b4f0e630a2416dd268da0",
+        "SKILL.md": "15fe3cc4ff9d927202ee9a9109dec07665c88b02a0d918f2d7341c9e50489f2a",
+        "references/backend-selection.md": "dc5611bbec2f0dc3c0632fc8e26c35130f2e0c56f33aa6bc8697a02ad500617f",
         "references/codex-cli-only.md": "fa491c59b7df821c18b222fd658e9183363fa9f4246e9aef84d16ae2d9193e2a",
         "references/completion-report.md": "34960727800c5ea1c9f8efb851e27f44234fa0fde5f9d05f1d071e3ff784b21c",
         "references/effort-routing.md": "9f0f3336829cec748e6c6eeae0c73316e719ef2c8103aeddfd7e0aa4c0cd1537",
-        "references/execution-modes.md": "543f6371605965724bff65e0b908c0ef97879f529eee5985dee1c475afab780f",
+        "references/execution-modes.md": "76a14b723faa31bbd6ed071267e5977e3d0803380041be46963148b5a8d6e461",
         "references/failure-reticketing.md": "230e30a5856daa8e706064e0a9c26007f5d1a808936edee5cb79aa0cc69b5f3e",
         "references/review-loop.md": "5d4f6e40b2863f264eb42bdb4e4d57a8c36e4031341793320c007aef0bf36b4d",
         "references/sprint-contract.md": "a0010525a1a3d9d99f5bf9cdb2867f31ad9388db7ab110d5d654a65868d473d2",
@@ -218,7 +218,7 @@
         "scripts/model-routing.sh": "e125963f328a15ff5248661a99f624cfb7414e3b164f9a7d05a4da069ea0bc1c",
         "scripts/night-watch-install.sh": "404e9b0c98941084c0237cfe4102bebf7c71db86a81552f0d5936991a79ff24c",
         "scripts/night-watch-report.sh": "f3417f450ab2a666a8afb87a7dc88b6e65a7d4f536498a6177e83efa74b4e238",
-        "scripts/opencode-setup-local.sh": "5813c8c442dd86e23db03b30725ccd4e33050c1ea31c93d5cda79880af43f3be",
+        "scripts/opencode-setup-local.sh": "067ef4599cd4670bf2c05bfefadff8140e770bc4bf7d09aa37a682eb924d3454",
         "scripts/plan-preapproval.sh": "30d56a04dc573767e8070fca7468c44978d74ee1e931d8992a2a1ac1551487e1",
         "scripts/repair-loop-state.sh": "50e972c1293dc2625936ff01ce8cd59969ca432a7f706394f13dfc3b3b54fc85",
         "scripts/resolve-impl-backend.sh": "6fd713e8fb4a63dbcf003b0e97b3e626c0109f3e04475c84f5cdf44d49de249b",
@@ -238,7 +238,7 @@
   },
   "upstream": {
     "repo": "https://github.com/Chachamaru127/claude-code-harness.git",
-    "sha": "2b2b74805321089bd9b660a1064fa97556299703",
-    "tag": "v5.15.0"
+    "sha": "c2304c325d4432f51d632e0586d886767b0f41ea",
+    "tag": "v5.16.0"
   }
 }
