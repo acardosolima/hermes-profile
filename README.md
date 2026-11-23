@@ -7,6 +7,7 @@ Personal Hermes Agent profile distribution — shared across your devices.
 ```bash
 hermes profile install ~/path/to/hermes-profile --name master --alias
 hermes profile use master
+python ~/.hermes/profiles/master/agent-hooks/lock_default.py   # default profile has no guard: turn its tools off
 cp ~/.hermes/profiles/master/.env.EXAMPLE ~/.hermes/profiles/master/.env
 # fill in only the keys this device has; none are required
 ```
