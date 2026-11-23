@@ -322,3 +322,7 @@ hooks:
       command: "{{profile_home}}/agent-hooks/gate-skill-manage.py"
       timeout: 5
       fail_closed: true
+    - matcher: "terminal|write_file|patch"
+      command: "{{profile_home}}/agent-hooks/gate-protected-paths.py"
+      timeout: 5
+      fail_closed: true
