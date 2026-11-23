@@ -47,6 +47,8 @@ require care.
 
 ## Updating
 
+The latest profile version is the newest GitHub release (`vX.Y.Z`). The version on a device is the `version` field in that profile's `distribution.yaml`. If they differ, run `hermes profile update master`. A release does not update a device by itself. `version` is bumped by `.github/workflows/release.yml` from conventional commits. Do not edit it by hand.
+
 When the upstream harness is updated, a CI workflow opens a PR. Merge it, then run:
 
 ```bash
