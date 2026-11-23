@@ -20,10 +20,14 @@ import json
 import os
 import stat
 import subprocess
-import sys
 from pathlib import Path
 
-HOOK_NAME = "gate-skill-manage.py"
+# (matcher, script filename). Each becomes one hooks.pre_tool_call entry.
+HOOKS: tuple[tuple[str, str], ...] = (
+    ("skill_manage", "gate-skill-manage.py"),
+    ("terminal|write_file|patch", "gate-protected-paths.py"),
+)
+HOOK_NAMES = tuple(name for _, name in HOOKS)
 
 
 def profile_dir(name: str) -> Path:
@@ -59,7 +63,7 @@ def hook_command(script: Path) -> str:
     return script.as_posix()
 
 
-def write_allowlist(profile: Path, command: str) -> None:
+def write_allowlist(profile: Path, commands: list[str]) -> None:
     path = profile / "shell-hooks-allowlist.json"
     data = {"approvals": []}
     if path.is_file():
@@ -75,10 +79,11 @@ def write_allowlist(profile: Path, command: str) -> None:
             kept.append(entry)
             continue
         existing = str(entry.get("command") or "")
-        if entry.get("event") == "pre_tool_call" and existing.endswith(HOOK_NAME):
+        if entry.get("event") == "pre_tool_call" and existing.endswith(HOOK_NAMES):
             continue
         kept.append(entry)
-    kept.append({"event": "pre_tool_call", "command": command})
+    for command in commands:
+        kept.append({"event": "pre_tool_call", "command": command})
     data["approvals"] = kept
     path.write_text(json.dumps(data, indent=2) + "\n", encoding="utf-8")
 
@@ -88,16 +93,19 @@ def main() -> None:
     parser.add_argument("--profile", default="master")
     args = parser.parse_args()
     profile = profile_dir(args.profile)
-    command = hook_command(profile / "agent-hooks" / HOOK_NAME)
-    payload = json.dumps(
-        [{"matcher": "skill_manage", "command": command, "timeout": 5, "fail_closed": True}]
-    )
+    specs = []
+    commands = []
+    for matcher, name in HOOKS:
+        command = hook_command(profile / "agent-hooks" / name)
+        commands.append(command)
+        specs.append({"matcher": matcher, "command": command, "timeout": 5, "fail_closed": True})
     subprocess.run(
-        ["hermes", "-p", args.profile, "config", "set", "hooks.pre_tool_call", payload],
+        ["hermes", "-p", args.profile, "config", "set", "hooks.pre_tool_call", json.dumps(specs)],
         check=True,
     )
-    write_allowlist(profile, command)
-    print(f"hook command: {command}")
+    write_allowlist(profile, commands)
+    for command in commands:
+        print(f"hook command: {command}")
     print(f"allowlist:    {profile / 'shell-hooks-allowlist.json'}")
 
 
