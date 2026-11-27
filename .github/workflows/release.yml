@@ -1,124 +1,37 @@
-name: release
+name: Semantic Release
 
 on:
-  workflow_run:
-    workflows: ["ci"]
-    types: [completed]
-    branches: [master]
-  workflow_dispatch:
+  push:
+    branches:
+      - master
 
 permissions:
   contents: write
+  issues: write
   pull-requests: write
-
-concurrency:
-  group: profile-release
-  cancel-in-progress: false
+  id-token: write
 
 jobs:
   release:
-    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
+    concurrency: release
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
         with:
-          ref: ${{ github.event_name == 'workflow_dispatch' && 'master' || github.event.workflow_run.head_sha }}
           fetch-depth: 0
-          token: ${{ github.token }}
 
-      - uses: actions/setup-python@v5
+      - name: Setup Python
+        uses: actions/setup-python@v5
         with:
-          python-version: "3.13"
+          python-version: '3.13'
 
-      - name: Decide version
-        id: plan
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          set -euo pipefail
-          git fetch origin --tags
-          current="$(python -c "import pathlib,re; t=pathlib.Path('distribution.yaml').read_text(); m=re.search(r'(?m)^version: (.+)$', t); print(m.group(1).strip())")"
-          echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
-          tags="$(git tag -l 'v*')"
-          if [ -z "$tags" ]; then
-            echo "action=publish" >> "$GITHUB_OUTPUT"
-            echo "version=$current" >> "$GITHUB_OUTPUT"
-            echo "prev=" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
-          last="$(git tag -l 'v*' --sort=-v:refname | head -1)"
-          echo "prev=$last" >> "$GITHUB_OUTPUT"
-          git log "${last}..HEAD" --no-merges --format='%s%n%b%n---' > /tmp/commits.txt
-          python - <<'PY'
-          import pathlib
-          import sys
-          sys.path.insert(0, "tools")
-          from release_version import parse_subject
-          raw = pathlib.Path("/tmp/commits.txt").read_text(encoding="utf-8")
-          blocks = [b for b in raw.split("\n---\n") if b.strip()]
-          out = []
-          for block in blocks:
-              head, _, body = block.partition("\n")
-              ctype, subject, breaking = parse_subject(head, body)
-              if breaking and "BREAKING CHANGE:" not in body:
-                  body = "BREAKING CHANGE: from subject\n" + body
-              out.append(f"{ctype}: {subject}\n{body}\n---\n")
-          pathlib.Path("/tmp/blocks.txt").write_text("".join(out), encoding="utf-8")
-          PY
-          decision="$(python tools/release_version.py plan --current "$current" --has-tags --commits-file /tmp/blocks.txt)"
-          echo "raw=$decision"
-          echo "action=${decision%% *}" >> "$GITHUB_OUTPUT"
-          echo "version=${decision##* }" >> "$GITHUB_OUTPUT"
+      - name: Install Semantic Release
+        run: pip install python-semantic-release
 
-      - name: Publish existing version
-        if: steps.plan.outputs.action == 'publish'
-        env:
-          GH_TOKEN: ${{ github.token }}
-          VERSION: ${{ steps.plan.outputs.version }}
-          SHA: ${{ steps.plan.outputs.sha }}
+      - name: Semantic Release
         run: |
-          set -euo pipefail
-          if gh release view "v${VERSION}" >/dev/null 2>&1; then
-            echo "v${VERSION} already exists"
-            exit 0
-          fi
-          gh release create "v${VERSION}" --target "$SHA" --title "v${VERSION}" \
-            --notes "Initial release. This is the profile version already installed on devices. distribution.yaml was already ${VERSION}."
-
-      - name: Bump, merge, and publish
-        if: steps.plan.outputs.action == 'bump'
-        env:
-          GH_TOKEN: ${{ github.token }}
-          VERSION: ${{ steps.plan.outputs.version }}
-          PREV: ${{ steps.plan.outputs.prev }}
-        run: |
-          set -euo pipefail
-          if gh release view "v${VERSION}" >/dev/null 2>&1; then
-            echo "v${VERSION} already exists"
-            exit 0
-          fi
-          branch="chore/release-v${VERSION}"
-          open_count="$(gh pr list --head "$branch" --state open --json number --jq 'length')"
-          if [ "$open_count" != "0" ]; then
-            echo "PR for $branch already open"
-            exit 0
-          fi
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git checkout -B "$branch"
-          python tools/release_version.py apply --current unused --version "$VERSION" --path distribution.yaml
-          git add distribution.yaml
-          git commit -m "chore: release v${VERSION}"
-          git push origin "$branch"
-          pr_url="$(gh pr create --base master --head "$branch" --title "chore: release v${VERSION}" --body "Sets distribution.yaml version to ${VERSION}.")"
-          gh pr merge "$pr_url" --squash --subject "chore: release v${VERSION}" --delete-branch
-          merge_sha="$(gh pr view "$pr_url" --json mergeCommit --jq .mergeCommit.oid)"
-          git fetch origin "$merge_sha"
-          git tag "v${VERSION}" "$merge_sha"
-          git push origin "v${VERSION}"
-          if [ -n "$PREV" ]; then
-            git log "${PREV}..${merge_sha}" --no-merges --format='%s' > /tmp/notes.txt
-          else
-            printf '%s\n' "chore: release v${VERSION}" > /tmp/notes.txt
-          fi
-          gh release create "v${VERSION}" --target "$merge_sha" --title "v${VERSION}" --notes-file /tmp/notes.txt
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          semantic-release version
+          semantic-release publish

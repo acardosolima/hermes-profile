@@ -1,3 +1,21 @@
+[tool.poetry]
+name = "hermes-profile"
+version = "1.2.0"
+description = "Personal agent config"
+authors = ["Adriano Lima"]
+license = "MIT"
+readme = "README.md"
+
+[tool.semantic_release]
+version_toml = ["pyproject.toml:tool.poetry.version"]
+version_variables = ["distribution.yaml:version: 'version: {}'"]
+branch = "master"
+upload_to_release = true
+build_command = "echo no build"
+major_on_zero = false
+allow_zero_version = true
+changelog_file = "CHANGELOG.md"
+
 [tool.ruff]
 line-length = 120
 target-version = "py39"
