@@ -31,6 +31,15 @@ class ActivateKeepsExistingHooks(unittest.TestCase):
         self.assertEqual(activate.LOCK_DEFAULT, "lock-default-profile.py")
 
 
+    def test_there_is_no_skip_flag(self):
+        source = (AGENT_HOOKS / "activate.py").read_text(encoding="utf-8")
+        self.assertNotIn("skip-default-lock", source)
+        self.assertNotIn("skip default lock", source)
+        lock = (AGENT_HOOKS / "lock-default-profile.py").read_text(encoding="utf-8")
+        self.assertNotIn("skip toolset verify", lock)
+        self.assertIn("raise SystemExit", source)
+        self.assertIn("raise SystemExit", lock)
+
 class LockScriptSettings(unittest.TestCase):
     def test_tool_search_uses_the_off_enum(self):
         text = (AGENT_HOOKS / "lock-default-profile.py").read_text(encoding="utf-8")

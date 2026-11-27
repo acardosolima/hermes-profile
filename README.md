@@ -69,9 +69,8 @@ multiplex gateway. After `activate.py`, that island is intentionally empty:
 Re-run anytime:
 
 ```bash
+python agent-hooks/activate.py --profile master
 python agent-hooks/lock-default-profile.py --profile master
-# or skip during activate:
-python agent-hooks/activate.py --profile master --skip-default-lock
 ```
 
 This is product friction, not OS isolation. A compromised **master** session

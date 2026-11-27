@@ -9,9 +9,9 @@ installed copy:
     python agent-hooks/activate.py
     python agent-hooks/activate.py --profile master
 
-Also runs lock-default-profile.py so the built-in default island cannot do
-real work (use --skip-default-lock to skip). That script chains to
-lock_default.py, which fails unless zero tools remain enabled.
+Always runs lock-default-profile.py. There is no way to skip that. If the
+script is missing, this command fails. It chains to lock_default.py, which
+fails unless zero tools remain enabled.
 
 On Windows, Hermes runs a .py hook with its own interpreter. On Linux and
 macOS the script's shebang is used, so this also marks the hook executable.
@@ -101,8 +101,7 @@ def lock_default_profile(named_profile: str, profile: Path) -> None:
         # still locks if the script sits next to this file.
         script = Path(__file__).resolve().parent / LOCK_DEFAULT
     if not script.is_file():
-        print(f"skip default lock: {script} missing", file=sys.stderr)
-        return
+        raise SystemExit(f"default lock script missing: {script}")
     subprocess.run(
         [sys.executable, str(script), "--profile", named_profile],
         check=True,
@@ -112,11 +111,6 @@ def lock_default_profile(named_profile: str, profile: Path) -> None:
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--profile", default="master")
-    parser.add_argument(
-        "--skip-default-lock",
-        action="store_true",
-        help="Do not lock the built-in default profile (escape hatch).",
-    )
     args = parser.parse_args()
     profile = profile_dir(args.profile)
     specs = []
@@ -133,8 +127,7 @@ def main() -> None:
     for command in commands:
         print(f"hook command: {command}")
     print(f"allowlist:    {profile / 'shell-hooks-allowlist.json'}")
-    if not args.skip_default_lock:
-        lock_default_profile(args.profile, profile)
+    lock_default_profile(args.profile, profile)
 
 
 if __name__ == "__main__":

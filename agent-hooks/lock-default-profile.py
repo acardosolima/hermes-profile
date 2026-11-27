@@ -154,8 +154,7 @@ def disable_known_toolsets(named_profile: str) -> None:
     """Overwrite the hardcoded denylist with every toolset the runtime reports."""
     sibling = Path(__file__).resolve().parent / "lock_default.py"
     if not sibling.is_file():
-        print(f"skip toolset verify: {sibling} missing", file=sys.stderr)
-        return
+        raise SystemExit(f"toolset lock script missing: {sibling}")
     subprocess.run(
         [sys.executable, str(sibling), "--profile", named_profile],
         check=True,
