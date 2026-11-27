@@ -7,13 +7,21 @@ Personal Hermes Agent profile distribution — shared across your devices.
 ```bash
 hermes profile install ~/path/to/hermes-profile --name master --alias
 hermes profile use master
-python ~/.hermes/profiles/master/agent-hooks/lock_default.py   # default profile has no guard: turn its tools off
+python ~/.hermes/profiles/master/agent-hooks/activate.py --profile master
 cp ~/.hermes/profiles/master/.env.EXAMPLE ~/.hermes/profiles/master/.env
 # fill in only the keys this device has; none are required
 ```
 
 On Windows, `HERMES_HOME` is `%LOCALAPPDATA%\hermes`. The installer prints the
 real path. A profile without its own `auth.json` reuses the default profile's login.
+
+`activate.py` does two machine-local things the runtime cannot store in git:
+
+1. Points this install at `gate-skill-manage.py` and `gate-protected-paths.py` (literal paths).
+2. **Locks the built-in `default` profile** so it has no tools and only redirects
+   to the named profile (`agent-hooks/lock-default-profile.py`, which then runs
+   `lock_default.py`). The built-in default profile cannot be deleted; locking it
+   is how a bypass session stays useless.
 
 ## Configuration
 
@@ -45,6 +53,28 @@ for how it works, how to check it, and known gaps.
 The guard blocks `skill_manage`, `execute_code`, `cronjob_manage`, and messaging
 platform terminal access by default. These can be re-enabled per-device but
 require care.
+
+### Locked default profile
+
+`default` is the built-in root home. It cannot be deleted and hosts the
+multiplex gateway. After `activate.py`, that island is intentionally empty:
+
+- `platform_toolsets.*` → `[]` (every platform)
+- `agent.disabled_toolsets` → every toolset the runtime knows (`lock_default.py` verifies 0 enabled)
+- `approvals.deny: ["*"]` (blocks any terminal even under yolo)
+- `agent.max_turns: 1`
+- connectors off, tool search `off`, lazy plugin installs off
+- root `SOUL.md` only redirects to the named profile (**master** by default)
+
+Re-run anytime:
+
+```bash
+python agent-hooks/activate.py --profile master
+python agent-hooks/lock-default-profile.py --profile master
+```
+
+This is product friction, not OS isolation. A compromised **master** session
+with shell can still edit the root config.
 
 ## Updating
 

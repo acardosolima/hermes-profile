@@ -75,6 +75,32 @@ class BlocksProtectedWrites(unittest.TestCase):
         # `ssh`/`ssh-keygen` without the .ssh path must not false-positive.
         self.assert_allowed(terminal("ssh -T git@github.com-personal"))
 
+
+    def test_gh_auth_token_blocked(self):
+        self.assert_blocked(terminal("gh auth token"))
+
+    def test_askpass_https_push_blocked(self):
+        self.assert_blocked(terminal("GIT_ASKPASS=./askpass.cmd git push https://github.com/acardosolima/hermes-profile.git HEAD"))
+
+    def test_credential_helper_override_blocked(self):
+        self.assert_blocked(terminal("git -c credential.helper='!gh auth git-credential' push https://github.com/acardosolima/hermes-profile.git HEAD"))
+
+    def test_bearer_header_push_blocked(self):
+        self.assert_blocked(terminal("git -c http.extraHeader='Authorization: Bearer x' push https://github.com/acardosolima/hermes-profile.git HEAD"))
+
+
+    def test_https_clone_allowed(self):
+        self.assert_allowed(terminal('git clone https://github.com/NousResearch/hermes-agent.git'))
+
+    def test_https_push_blocked(self):
+        self.assert_blocked(terminal('git push https://github.com/acardosolima/hermes-profile.git HEAD'))
+
+    def test_ssh_push_still_allowed(self):
+        self.assert_allowed(terminal("git push git@github.com:acardosolima/hermes-profile.git HEAD:feat/lock-default-profile"))
+
+    def test_gh_pr_view_still_allowed(self):
+        self.assert_allowed(terminal("gh pr view 20"))
+
     def test_unrelated_command_allowed(self):
         self.assert_allowed(terminal("ls -la && echo done"))
 
