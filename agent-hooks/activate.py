@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Point this machine's profile at the skill_manage hook.
+"""Point this machine's profile at its hooks, and lock the default profile.
 
 The hook command is a literal path. Hermes does not expand variables, and
 the profile directory is not the same on Linux, macOS, and Windows. Nothing
@@ -8,6 +8,10 @@ installed copy:
 
     python agent-hooks/activate.py
     python agent-hooks/activate.py --profile master
+
+Also runs lock-default-profile.py so the built-in default island cannot do
+real work (use --skip-default-lock to skip). That script chains to
+lock_default.py, which fails unless zero tools remain enabled.
 
 On Windows, Hermes runs a .py hook with its own interpreter. On Linux and
 macOS the script's shebang is used, so this also marks the hook executable.
@@ -20,6 +24,7 @@ import json
 import os
 import stat
 import subprocess
+import sys
 from pathlib import Path
 
 # (matcher, script filename). Each becomes one hooks.pre_tool_call entry.
@@ -28,6 +33,7 @@ HOOKS: tuple[tuple[str, str], ...] = (
     ("terminal|write_file|patch", "gate-protected-paths.py"),
 )
 HOOK_NAMES = tuple(name for _, name in HOOKS)
+LOCK_DEFAULT = "lock-default-profile.py"
 
 
 def profile_dir(name: str) -> Path:
@@ -87,10 +93,30 @@ def write_allowlist(profile: Path, commands: list[str]) -> None:
     data["approvals"] = kept
     path.write_text(json.dumps(data, indent=2) + "\n", encoding="utf-8")
 
+def lock_default_profile(named_profile: str, profile: Path) -> None:
+    """Make the built-in default profile unusable so work must use *named_profile*."""
+    script = profile / "agent-hooks" / LOCK_DEFAULT
+    if not script.is_file():
+        # Installed copy should always ship this; a checkout run before copy
+        # still locks if the script sits next to this file.
+        script = Path(__file__).resolve().parent / LOCK_DEFAULT
+    if not script.is_file():
+        print(f"skip default lock: {script} missing", file=sys.stderr)
+        return
+    subprocess.run(
+        [sys.executable, str(script), "--profile", named_profile],
+        check=True,
+    )
+
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--profile", default="master")
+    parser.add_argument(
+        "--skip-default-lock",
+        action="store_true",
+        help="Do not lock the built-in default profile (escape hatch).",
+    )
     args = parser.parse_args()
     profile = profile_dir(args.profile)
     specs = []
@@ -107,6 +133,8 @@ def main() -> None:
     for command in commands:
         print(f"hook command: {command}")
     print(f"allowlist:    {profile / 'shell-hooks-allowlist.json'}")
+    if not args.skip_default_lock:
+        lock_default_profile(args.profile, profile)
 
 
 if __name__ == "__main__":
