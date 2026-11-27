@@ -1,5 +1,5 @@
 name: hermes-profile
-version: 1.0.0
+version: 1.2.0
 description: "Personal Hermes agent config: provider-agnostic model routing (choose per device), local Ollama (hermes3:8b) delegation orchestration, TDD/code-review/debugging skills auto-loaded."
 hermes_requires: ">=0.12.0"
 author: "Adriano Lima"

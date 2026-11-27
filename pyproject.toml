@@ -1,3 +1,11 @@
+[tool.poetry]
+name = "hermes-profile"
+version = "1.2.0"
+description = "Personal agent config: provider-agnostic model routing (choose per device), local Ollama delegation orchestration, TDD/code-review/debugging skills auto-loaded."
+authors = ["Adriano Lima"]
+license = "MIT"
+readme = "README.md"
+
 [tool.ruff]
 line-length = 120
 target-version = "py39"
