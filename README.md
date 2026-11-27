@@ -1,6 +1,7 @@
 # hermes-profile
 
 [![license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![release](https://img.shields.io/github/v/release/acardosolima/hermes-profile)](https://github.com/acardosolima/hermes-profile/releases)
 
 Personal Hermes Agent profile distribution — shared across your devices.
 
