@@ -1,5 +1,7 @@
 # hermes-profile
 
+[![license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
 Personal Hermes Agent profile distribution — shared across your devices.
 
 ## Quick start
