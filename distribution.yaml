@@ -1,6 +1,6 @@
 name: hermes-profile
 # Bumped by .github/workflows/release.yml. Do not edit by hand.
-version: 1.2.1
+version: 1.3.0
 description: "Personal Hermes agent config: provider-agnostic model routing (choose per device), local Ollama (hermes3:8b) delegation orchestration, TDD/code-review/debugging skills auto-loaded."
 hermes_requires: ">=0.12.0"
 author: "Adriano Lima"
