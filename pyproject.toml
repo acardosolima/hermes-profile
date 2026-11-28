@@ -8,7 +8,7 @@ readme = "README.md"
 
 [tool.semantic_release]
 version_toml = ["pyproject.toml:tool.poetry.version"]
-version_variables = ["distribution.yaml:version:version: (.+)"]
+version_variables = [{ file = "distribution.yaml", variable = "version", pattern = "version: (.+)" }]
 branch = "master"
 upload_to_release = true
 build_command = "echo no build"
